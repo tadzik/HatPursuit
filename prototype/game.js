@@ -1,6 +1,8 @@
 var cars = []
 var carComponent = Qt.createComponent("Car.qml")
 
+init();
+
 function init() {
 }
 
@@ -18,6 +20,11 @@ function update() {
         } else {
             car.destroy()
         }
+    }
+
+    if ((motor.x + motor.velocity) >= 0
+       && (motor.x + motor.velocity) <= (screen.width - motor.width)) {
+        motor.x += motor.velocity;
     }
 
     cars = newcars

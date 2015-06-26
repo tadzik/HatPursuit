@@ -8,6 +8,18 @@ Rectangle {
     color: "gray"
 
     Rectangle {
+        id: motor
+        width: 50
+        height: 50
+        color: "green"
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 50
+        Component.onCompleted: { x = screen.width / 2 - motor.width / 2 }
+
+        property int velocity
+    }
+
+    Rectangle {
         id: leftHalf
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
@@ -16,7 +28,7 @@ Rectangle {
         opacity: 0
         MouseArea {
             anchors.fill: parent
-            onClicked: { console.log("Left!") }
+            onClicked: { console.log("Left!"); motor.velocity = -10 }
         }
     }
 
@@ -29,7 +41,7 @@ Rectangle {
         opacity: 0
         MouseArea {
             anchors.fill: parent
-            onClicked: { console.log("Right!") }
+            onClicked: { console.log("Right!"); motor.velocity = 10; }
         }
     }
 
