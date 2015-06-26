@@ -7,20 +7,11 @@ Rectangle {
     height: 960
     color: "gray"
 
-    Image {
-        id: car
-        width: 120
-        height: 242
-        x: 200
-        y: 0
-        source: "racecar.png"
-    }
-
     Timer {
         id: gameTimer
         interval: 16
         repeat: true
         running: true
-        onTriggered: Engine.onUpdate()
+        onTriggered: Engine.update()
     }
 }
