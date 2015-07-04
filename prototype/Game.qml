@@ -7,6 +7,9 @@ Rectangle {
     height: 960
     color: "gray"
 
+    Keys.onLeftPressed:  { console.log("Left!"); motor.velocity  = -10; }
+    Keys.onRightPressed: { console.log("Right!"); motor.velocity =  10; }
+
     Rectangle {
         id: motor
         width: 50
@@ -17,6 +20,14 @@ Rectangle {
         Component.onCompleted: { x = screen.width / 2 - motor.width / 2 }
 
         property int velocity
+
+        transform: Rotation {
+            id: motor_rotation
+            origin.x: motor.width / 2
+            origin.y: motor.height / 2
+            axis { x: 0; y: 0; z: 1 }
+            angle: 0
+        }
     }
 
     Rectangle {
