@@ -1,11 +1,25 @@
 var cars = []
+var stripes = []
 var carComponent = Qt.createComponent("Car.qml")
+var stripeComponent = Qt.createComponent("Stripe.qml")
 var crashed = false
 var crash_direction = 1
+var base_velocity = 10
 
-init();
-
-function init() {
+function init_stripes() {
+    for (var i = 0; i < 8; i++) {
+        var sl = stripeComponent.createObject(screen, {
+            x: screen.width / 3,
+            y: 0 })
+        sl.x -= sl.width / 2
+        sl.y += i * sl.height * 1.5
+        var sr = stripeComponent.createObject(screen, {
+            x: screen.width - screen.width / 3,
+            y: 0 })
+        sr.x -= sr.width / 2
+        sr.y += i * sr.height * 1.5
+        stripes.push(sl, sr)
+    }
 }
 
 // this shit better be correct for I really don't
@@ -34,6 +48,9 @@ function update() {
     if (crashed) {
         return after_crash();
     }
+    if (stripes.length == 0) {
+        init_stripes();
+    }
     var newcars = []
     var roomForMore = true
     for (var i = 0; i < cars.length; i++) {
@@ -49,9 +66,21 @@ function update() {
         }
     }
 
-    if ((motor.x + motor.velocity) >= 0
-       && (motor.x + motor.velocity) <= (screen.width - motor.width)) {
-        motor.x += motor.velocity;
+    for (var i = 0; i < stripes.length; i++) {
+        stripes[i].y += base_velocity
+        if (stripes[i].y > screen.height) {
+            stripes[i].y -= stripes[i].height * 0.75 * stripes.length
+        }
+    }
+
+    motor.x += motor.velocity;
+    if (motor.x + motor.velocity < 0) {
+        crashed = true;
+        crash_direction = -1;
+    }
+    if ((motor.x + motor.velocity) > (screen.width - motor.width)) {
+        crashed = true;
+        crash_direction = 1;
     }
 
     cars = newcars
@@ -72,7 +101,7 @@ function update() {
         var c = carComponent.createObject(screen, { x: 200, y: 0 })
         c.y -= c.height * 1.5 // half a car of space between cars
         c.x = Math.random() * (screen.width - c.width)
-        c.velocity = 10
+        c.velocity = base_velocity
         if (c == null) {
             console.log("ERROR: " + carComponent.errorString())
         } else {
