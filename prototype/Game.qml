@@ -6,6 +6,7 @@ Rectangle {
     width: 540
     height: 960
     color: "gray"
+    focus: true
 
     Keys.onLeftPressed:  { console.log("Left!"); motor.velocity  = -10; }
     Keys.onRightPressed: { console.log("Right!"); motor.velocity =  10; }
