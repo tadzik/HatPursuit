@@ -8,8 +8,8 @@ Rectangle {
     color: "gray"
     focus: true
 
-    Keys.onLeftPressed:  { console.log("Left!"); motor.velocity  = -10; }
-    Keys.onRightPressed: { console.log("Right!"); motor.velocity =  10; }
+    Keys.onLeftPressed:  { console.log("Left!"); motor.velocity  = -8; }
+    Keys.onRightPressed: { console.log("Right!"); motor.velocity =  8; }
 
     Rectangle {
         id: motor
@@ -40,7 +40,7 @@ Rectangle {
         opacity: 0
         MouseArea {
             anchors.fill: parent
-            onClicked: { console.log("Left!"); motor.velocity = -10 }
+            onClicked: { console.log("Left!"); motor.velocity = -8 }
         }
     }
 
@@ -53,7 +53,7 @@ Rectangle {
         opacity: 0
         MouseArea {
             anchors.fill: parent
-            onClicked: { console.log("Right!"); motor.velocity = 10; }
+            onClicked: { console.log("Right!"); motor.velocity = 8; }
         }
     }
 
