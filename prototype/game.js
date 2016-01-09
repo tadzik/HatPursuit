@@ -47,6 +47,17 @@ function after_crash() {
     }
 }
 
+var colors = [];
+function get_color() {
+    var index = Math.floor(Math.random() * colors.length);
+
+    if(colors.length == 0) {
+        colors = car_colors.slice();
+    }
+
+    return colors.splice(index, 1)[0];
+}
+
 function update() {
     if (crashed) {
         return after_crash();
@@ -104,7 +115,7 @@ function update() {
         var c = carComponent.createObject(screen, {
             x: 200,
             y: 0,
-            color: car_colors[Math.floor(Math.random() * car_colors.length)]
+            color: get_color()
         });
         c.y -= c.height * 1.9 // space between cars
         c.x = Math.random() * (screen.width - c.width)
