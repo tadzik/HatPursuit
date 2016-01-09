@@ -60,9 +60,7 @@ function collides(a, b) {
 
 function after_crash() {
     bike.x += 4 * crash_direction
-    console.log(bike.rotationAngle)
     bike.rotationAngle += 4.0
-    console.log(bike.rotationAngle)
     if (bike.rotationAngle % 360 == 0
     || bike.x > screen.width
     || bike.x + bike.width < 0) {
@@ -113,7 +111,6 @@ function update() {
         }
     }
 
-    console.log(bike.velocity)
     bike.x += bike.velocity;
     if (bike.x + bike.velocity < leftBorder.width) {
         crashed = true;
