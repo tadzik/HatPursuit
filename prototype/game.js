@@ -10,10 +10,12 @@ var car_colors = ["red", "green", "blue"];
 var bike = null
 
 function onLeft() {
+    if (crashed) return
     bike.turnLeft()
 }
 
 function onRight() {
+    if (crashed) return
     bike.turnRight()
 }
 
