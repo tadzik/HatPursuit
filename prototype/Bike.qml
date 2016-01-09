@@ -18,6 +18,11 @@ Item {
         rotationAngle = 15
     }
 
+    function attachHat(hat) {
+        hat.anchors.bottom = backWheel.top
+        hat.anchors.horizontalCenter = body.horizontalCenter
+    }
+
     transform: Rotation {
         origin.x: width / 2
         origin.y: height / 2
