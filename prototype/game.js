@@ -6,7 +6,10 @@ var stripeComponent = Qt.createComponent("Stripe.qml")
 var crashed = false
 var crash_direction = 1
 var base_velocity = 8
-var car_colors = ["red", "green", "blue"];
+var car_colors = [
+    "red", "green", "blue", "orange", "lime", "steelblue",
+    "crimson", "darkgoldenrod", "orchid", "deeppink"
+];
 var bike = null
 
 function onLeft() {
