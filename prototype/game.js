@@ -1,11 +1,23 @@
 var cars = []
 var stripes = []
 var carComponent = Qt.createComponent("Car.qml")
+var bikeComponent = Qt.createComponent("Bike.qml")
 var stripeComponent = Qt.createComponent("Stripe.qml")
 var crashed = false
 var crash_direction = 1
 var base_velocity = 8
 var car_colors = ["red", "green", "blue"];
+var bike = null
+
+function onLeft() {
+    console.log("Left!")
+    bike.velocity = -8
+}
+
+function onRight() {
+    console.log("Right!")
+    bike.velocity = 8
+}
 
 function new_stripe(x, i) {
     var s = stripeComponent.createObject(screen, {
@@ -15,6 +27,15 @@ function new_stripe(x, i) {
     s.y += i * s.height * 1.5;
 
     stripes.push(s);
+}
+
+function init_bike() {
+    var b = bikeComponent.createObject(screen)
+    b.anchors.bottom = screen.bottom
+    b.anchors.bottomMargin = 50
+    b.x = (screen.width - b.width) / 2
+    b.color =  "green"
+    return b
 }
 
 function init_stripes() {
@@ -38,11 +59,13 @@ function collides(a, b) {
 }
 
 function after_crash() {
-    motor.x += 4 * crash_direction
-    motor_rotation.angle += 4
-    if (motor_rotation.angle % 360 == 0
-    || motor.x > screen.width
-    || motor.x + motor.width < 0) {
+    bike.x += 4 * crash_direction
+    console.log(bike.rotationAngle)
+    bike.rotationAngle += 4.0
+    console.log(bike.rotationAngle)
+    if (bike.rotationAngle % 360 == 0
+    || bike.x > screen.width
+    || bike.x + bike.width < 0) {
         Qt.quit()
     }
 }
@@ -59,11 +82,14 @@ function get_color() {
 }
 
 function update() {
-    if (crashed) {
-        return after_crash();
-    }
     if (stripes.length == 0) {
-        init_stripes();
+        init_stripes()
+    }
+    if (!bike) {
+        bike = init_bike()
+    }
+    if (crashed) {
+        return after_crash()
     }
     var newcars = []
     var roomForMore = true
@@ -87,12 +113,13 @@ function update() {
         }
     }
 
-    motor.x += motor.velocity;
-    if (motor.x + motor.velocity < leftBorder.width) {
+    console.log(bike.velocity)
+    bike.x += bike.velocity;
+    if (bike.x + bike.velocity < leftBorder.width) {
         crashed = true;
         crash_direction = -1;
     }
-    if ((motor.x + motor.velocity) > (rightBorder.x - motor.width)) {
+    if ((bike.x + bike.velocity) > (rightBorder.x - bike.width)) {
         crashed = true;
         crash_direction = 1;
     }
@@ -100,10 +127,10 @@ function update() {
     cars = newcars
 
     for (var i = 0; i < cars.length; i++) {
-        if (collides(motor, cars[i])) {
+        if (collides(bike, cars[i])) {
             console.log("CRASH")
             crashed = true;
-            if ((motor.x + motor.width / 2)
+            if ((bike.x + bike.width / 2)
             < (cars[i].x + cars[i].width / 2)) {
                 console.log("Going left")
                 crash_direction = -1
