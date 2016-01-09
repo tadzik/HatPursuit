@@ -62,7 +62,8 @@ function after_crash() {
     if (bike.rotationAngle % 360 == 0
     || bike.x > screen.width
     || bike.x + bike.width < 0) {
-        Qt.quit()
+        console.log("Score:", score.text);
+        Qt.quit();
     }
 }
 
