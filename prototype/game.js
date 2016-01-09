@@ -10,11 +10,11 @@ var car_colors = ["red", "green", "blue"];
 var bike = null
 
 function onLeft() {
-    bike.velocity = -8
+    bike.turnLeft()
 }
 
 function onRight() {
-    bike.velocity = 8
+    bike.turnRight()
 }
 
 function new_stripe(x, i) {
