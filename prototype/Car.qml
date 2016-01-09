@@ -1,4 +1,4 @@
-import QtQuick 2.0;
+import QtQuick 2.0
 
 Item {
     width: 120
@@ -6,10 +6,11 @@ Item {
 
     property int velocity
     property int wheelWidth: 16
+    property int wheelHeight: 45
     property int lightRadius: 24
 
-    // left lights
     Rectangle {
+        id: leftLight
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.leftMargin: parent.wheelWidth
@@ -20,8 +21,8 @@ Item {
         color: "yellow"
     }
 
-    // right light
     Rectangle {
+        id: rightLight
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.rightMargin: parent.wheelWidth
@@ -32,53 +33,52 @@ Item {
         color: "yellow"
     }
 
-    // wheels
-    // top left
     Rectangle {
+        id: topLeftWheel
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.topMargin: 25
         width: parent.wheelWidth
-        height: 45
+        height: parent.wheelHeight
         radius: 25.0
         color: "black"
     }
 
-    // top right
     Rectangle {
+        id: topRightWheel
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.topMargin: 25
         width: parent.wheelWidth
-        height: 45
+        height: parent.wheelHeight
         radius: 25.0
         color: "black"
     }
 
-    // bottom left
     Rectangle {
+        id: bottomLeftWheel
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.bottomMargin: 25
         width: parent.wheelWidth
-        height: 45
+        height: parent.wheelHeight
         radius: 25.0
         color: "black"
     }
 
-    // bottom right
     Rectangle {
+        id: bottomRightWheel
         anchors.bottom: parent.bottom
         anchors.right: parent.right
         anchors.bottomMargin: 25
         width: parent.wheelWidth
-        height: 45
+        height: parent.wheelHeight
         radius: 25.0
         color: "black"
     }
 
-    // body
     Rectangle {
+        id: body
         width: parent.width
         height: parent.height
         anchors.left: parent.left
@@ -88,5 +88,17 @@ Item {
         anchors.topMargin: parent.lightRadius / 2
         color: "red"
         radius: 15.0
+    }
+
+    Rectangle {
+        id: roof
+        radius: 15.0
+        width: body.width
+        height: body.height / 2
+        anchors.horizontalCenter: body.horizontalCenter
+        anchors.verticalCenter: body.verticalCenter
+        color: body.color
+        border.color: "black"
+        border.width: 3
     }
 }
