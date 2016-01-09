@@ -111,6 +111,7 @@ function update() {
         }
     }
 
+    score.distance += 0.1;
     bike.x += bike.velocity;
     if (bike.x + bike.velocity < leftBorder.width) {
         crashed = true;

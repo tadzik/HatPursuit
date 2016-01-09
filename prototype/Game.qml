@@ -11,13 +11,21 @@ Rectangle {
     Keys.onLeftPressed:  Engine.onLeft()
     Keys.onRightPressed: Engine.onRight()
 
+    Text {
+        property real distance: 0
+
+        id: score
+        text: Math.floor(distance).toString()
+        font.pixelSize: 25
+
+        Component.onCompleted: { x = 25; y = 10; }
+    }
+
     Rectangle {
         id: leftBorder
         width: 10
         height: 960
         color: "black"
-
-        // Component.onCompleted: {}
     }
 
     Rectangle {
