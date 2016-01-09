@@ -6,19 +6,21 @@ var crashed = false
 var crash_direction = 1
 var base_velocity = 8
 
+function new_stripe(x, i) {
+    var s = stripeComponent.createObject(screen, {
+        x: x,
+        y: 0 });
+    s.x -= s.width / 2;
+    s.y += i * s.height * 1.5;
+
+    stripes.push(s);
+}
+
 function init_stripes() {
     for (var i = 0; i < 8; i++) {
-        var sl = stripeComponent.createObject(screen, {
-            x: screen.width / 3,
-            y: 0 })
-        sl.x -= sl.width / 2
-        sl.y += i * sl.height * 1.5
-        var sr = stripeComponent.createObject(screen, {
-            x: screen.width - screen.width / 3,
-            y: 0 })
-        sr.x -= sr.width / 2
-        sr.y += i * sr.height * 1.5
-        stripes.push(sl, sr)
+        new_stripe(screen.width / 4, i);
+        new_stripe(screen.width - screen.width / 4, i);
+        new_stripe(screen.width / 2, i);
     }
 }
 
@@ -69,7 +71,7 @@ function update() {
     for (var i = 0; i < stripes.length; i++) {
         stripes[i].y += base_velocity
         if (stripes[i].y > screen.height) {
-            stripes[i].y -= stripes[i].height * 0.75 * stripes.length
+            stripes[i].y -= stripes[i].height * 0.5 * stripes.length
         }
     }
 
