@@ -10,12 +10,10 @@ var car_colors = ["red", "green", "blue"];
 var bike = null
 
 function onLeft() {
-    console.log("Left!")
     bike.velocity = -8
 }
 
 function onRight() {
-    console.log("Right!")
     bike.velocity = 8
 }
 
