@@ -5,6 +5,7 @@ var stripeComponent = Qt.createComponent("Stripe.qml")
 var crashed = false
 var crash_direction = 1
 var base_velocity = 8
+var car_colors = ["red", "green", "blue"];
 
 function new_stripe(x, i) {
     var s = stripeComponent.createObject(screen, {
@@ -100,7 +101,11 @@ function update() {
     }
 
     if (roomForMore) {
-        var c = carComponent.createObject(screen, { x: 200, y: 0 })
+        var c = carComponent.createObject(screen, {
+            x: 200,
+            y: 0,
+            color: car_colors[Math.floor(Math.random() * car_colors.length)]
+        });
         c.y -= c.height * 1.9 // space between cars
         c.x = Math.random() * (screen.width - c.width)
         c.velocity = base_velocity

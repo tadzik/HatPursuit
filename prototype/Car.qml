@@ -8,6 +8,7 @@ Item {
     property int wheelWidth: 16
     property int wheelHeight: 45
     property int lightRadius: 24
+    property string color: "red"
 
     Rectangle {
         id: leftLight
@@ -86,7 +87,7 @@ Item {
         anchors.leftMargin: parent.wheelWidth / 2
         anchors.rightMargin: parent.wheelWidth / 2
         anchors.topMargin: parent.lightRadius / 2
-        color: "red"
+        color: parent.color
         radius: 15.0
     }
 
