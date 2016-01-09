@@ -76,11 +76,11 @@ function update() {
     }
 
     motor.x += motor.velocity;
-    if (motor.x + motor.velocity < 0) {
+    if (motor.x + motor.velocity < leftBorder.width) {
         crashed = true;
         crash_direction = -1;
     }
-    if ((motor.x + motor.velocity) > (screen.width - motor.width)) {
+    if ((motor.x + motor.velocity) > (rightBorder.x - motor.width)) {
         crashed = true;
         crash_direction = 1;
     }

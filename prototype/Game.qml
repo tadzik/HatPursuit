@@ -12,6 +12,24 @@ Rectangle {
     Keys.onRightPressed: { console.log("Right!"); motor.velocity =  8; }
 
     Rectangle {
+        id: leftBorder
+        width: 10
+        height: 960
+        color: "black"
+
+        // Component.onCompleted: {}
+    }
+
+    Rectangle {
+        id: rightBorder
+        width: 10
+        height: 960
+        color: "black"
+
+        Component.onCompleted: { x = screen.width - rightBorder.width }
+    }
+
+    Rectangle {
         id: motor
         width: 50
         height: 50
