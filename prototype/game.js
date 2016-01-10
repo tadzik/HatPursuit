@@ -12,6 +12,7 @@ var car_colors = [
     "crimson", "darkgoldenrod", "orchid", "deeppink"
 ];
 var bike = null
+var hatDrop = null
 
 function onLeft() {
     if (crashed) return
@@ -21,6 +22,14 @@ function onLeft() {
 function onRight() {
     if (crashed) return
     bike.turnRight()
+}
+
+function shouldHatDrop() {
+    return hatDrop == null
+}
+
+function generateHat() {
+    return topHatComponent.createObject(screen, {})
 }
 
 function new_stripe(x, i) {
@@ -96,6 +105,7 @@ function update() {
     if (crashed) {
         return after_crash()
     }
+
     var newcars = []
     var roomForMore = true
     for (var i = 0; i < cars.length; i++) {
@@ -110,11 +120,20 @@ function update() {
             car.destroy()
         }
     }
+    cars = newcars
 
     for (var i = 0; i < stripes.length; i++) {
         stripes[i].y += base_velocity
         if (stripes[i].y > screen.height) {
             stripes[i].y -= stripes[i].height * 0.5 * stripes.length
+        }
+    }
+
+    if (hatDrop) {
+        hatDrop.y += base_velocity
+        if (hatDrop.y > screen.height) {
+            hatDrop.destroy()
+            hatDrop = null
         }
     }
 
@@ -128,8 +147,6 @@ function update() {
         crashed = true;
         crash_direction = 1;
     }
-
-    cars = newcars
 
     for (var i = 0; i < cars.length; i++) {
         if (collides(bike, cars[i])) {
@@ -157,5 +174,20 @@ function update() {
         } else {
             cars.push(c)
         }
+
+        if (shouldHatDrop()) {
+            hatDrop = generateHat()
+            if ((c.x + c.width/2) < screen.width/2) {
+                hatDrop.x = c.x + 2 * c.width
+            } else {
+                hatDrop.x = c.x - c.width
+            }
+            hatDrop.y = c.y + c.height/2
+        }
+    }
+
+    if (hatDrop && collides(bike, hatDrop)) {
+        hatDrop.destroy()
+        hatDrop = null
     }
 }
