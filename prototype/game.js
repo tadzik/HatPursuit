@@ -171,7 +171,6 @@ function update() {
             crashed = true;
             if ((bike.x + bike.width / 2)
             < (cars[i].x + cars[i].width / 2)) {
-                console.log("Going left")
                 crash_direction = -1
             }
         }

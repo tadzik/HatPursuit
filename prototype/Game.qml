@@ -51,7 +51,7 @@ Rectangle {
             db.transaction(
                 function (tx) {
                     var rs = tx.executeSql('SELECT * FROM Score ORDER BY score DESC');
-                    highScore = rs.rows.item(0).score;
+                    highScore = rs.rows.item(0) == null ? '0' : rs.rows.item(0).score;
                 }
             );
             return highScore;
@@ -62,6 +62,7 @@ Rectangle {
 
             db.transaction(
                 function (tx) {
+                    // save only if higher?
                     tx.executeSql('INSERT INTO Score VALUES(?)', [ score == null ? '0' : score.toString() ]);
                 }
             );
@@ -69,10 +70,10 @@ Rectangle {
     }
 
     Text {
-        property real distance: 0
+        property string bestScore: '0'
 
         id: highScore
-        text: "Top Score: miljart"
+        text: "Top score: " + bestScore
         font.pixelSize: 25
 
         anchors.top: parent.top
@@ -80,6 +81,10 @@ Rectangle {
         anchors.topMargin: 10
         anchors.rightMargin: 25
         z: layer_ui
+
+        Component.onCompleted: {
+            bestScore = score.getHighScore();
+        }
     }
 
     Rectangle {
