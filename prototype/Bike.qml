@@ -7,6 +7,7 @@ Item {
     property int velocity: 0
     property string color: "green"
     property real rotationAngle: 0
+    property var hat: null
 
     function turn_left() {
         velocity = -8
@@ -18,7 +19,9 @@ Item {
         rotationAngle = 15
     }
 
-    function attach_hat(hat) {
+    function attach_hat(newHat) {
+        if (hat) hat.destroy()
+        hat = newHat
         hat.anchors.top = handle.top
         hat.anchors.horizontalCenter = body.horizontalCenter
     }

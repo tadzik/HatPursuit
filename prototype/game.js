@@ -4,6 +4,7 @@ var carComponent = Qt.createComponent("Car.qml")
 var bikeComponent = Qt.createComponent("Bike.qml")
 var stripeComponent = Qt.createComponent("Stripe.qml")
 var topHatComponent = Qt.createComponent("hats/TopHat.qml")
+var bowlerComponent = Qt.createComponent("hats/Bowler.qml")
 var crashed = false
 var crash_direction = 1
 var base_velocity = 8
@@ -29,10 +30,13 @@ function should_hat_drop() {
 }
 
 function generate_hat() {
-    return topHatComponent.createObject(screen, {
+    var components = [bowlerComponent, topHatComponent];
+    var idx = Math.floor(Math.random() * components.length);
+    return components[idx].createObject(screen, {
         primaryColor: get_hat_color(),
         secondaryColor: get_hat_color(),
-        z: screen.layer_hats
+        z: screen.layer_hats,
+        component: components[idx],
     })
 }
 
@@ -204,6 +208,12 @@ function update() {
     }
 
     if (hatDrop && collides(bike, hatDrop)) {
+        var clone = hatDrop.component.createObject(bike, {
+            primaryColor: hatDrop.primaryColor,
+            secondaryColor: hatDrop.primaryColor,
+            component: hatDrop.component,
+        })
+        bike.attach_hat(clone)
         hatDrop.destroy()
         hatDrop = null
     }

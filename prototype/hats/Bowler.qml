@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item {
     width: 30
-    height: 30
+    height: 20
 
     property string primaryColor: "black"
     property string secondaryColor: "red"
@@ -18,6 +18,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         border.width: 1
         border.color: "grey"
+        radius: height / 2
     }
 
     Rectangle {
