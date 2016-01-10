@@ -90,8 +90,8 @@ function update() {
     }
     if (!bike) {
         bike = init_bike()
-        var hat = topHatComponent.createObject(bike);
-        hat.y = 20
+        var hat = topHatComponent.createObject(bike)
+        bike.attachHat(hat)
     }
     if (crashed) {
         return after_crash()

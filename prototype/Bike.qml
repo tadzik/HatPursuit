@@ -19,7 +19,7 @@ Item {
     }
 
     function attachHat(hat) {
-        hat.anchors.bottom = backWheel.top
+        hat.anchors.top = handle.top
         hat.anchors.horizontalCenter = body.horizontalCenter
     }
 
