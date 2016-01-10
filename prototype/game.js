@@ -29,13 +29,16 @@ function shouldHatDrop() {
 }
 
 function generateHat() {
-    return topHatComponent.createObject(screen, {})
+    return topHatComponent.createObject(screen, {
+        z: screen.layer_hats
+    })
 }
 
 function new_stripe(x, i) {
     var s = stripeComponent.createObject(screen, {
         x: x,
-        y: 0 });
+        y: 0,
+        z: screen.layer_stripes });
     s.x -= s.width / 2;
     s.y += i * s.height * 1.5;
 
@@ -47,6 +50,7 @@ function init_bike() {
     b.anchors.bottom = screen.bottom
     b.anchors.bottomMargin = 50
     b.x = (screen.width - b.width) / 2
+    b.z = screen.layer_cars
     b.color =  "green"
     return b
 }
@@ -99,7 +103,9 @@ function update() {
     }
     if (!bike) {
         bike = init_bike()
-        var hat = topHatComponent.createObject(bike)
+        var hat = topHatComponent.createObject(bike, {
+            z: screen.layer_hats
+        })
         bike.attachHat(hat)
     }
     if (crashed) {
@@ -164,6 +170,7 @@ function update() {
         var c = carComponent.createObject(screen, {
             x: 200,
             y: 0,
+            z: screen.layer_cars,
             color: get_color()
         });
         c.y -= c.height * 1.9 // space between cars

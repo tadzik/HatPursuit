@@ -8,6 +8,12 @@ Rectangle {
     color: "gray"
     focus: true
 
+    property int layer_asphalt: 0
+    property int layer_stripes: 1
+    property int layer_cars:    2
+    property int layer_hats:    3
+    property int layer_ui:    100
+
     Keys.onLeftPressed:  Engine.onLeft()
     Keys.onRightPressed: Engine.onRight()
 
@@ -22,6 +28,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.topMargin: 10
         anchors.leftMargin: 25
+        z: layer_ui
     }
 
     Text {
@@ -35,6 +42,7 @@ Rectangle {
         anchors.right: parent.right
         anchors.topMargin: 10
         anchors.rightMargin: 25
+        z: layer_ui
     }
 
     Rectangle {
