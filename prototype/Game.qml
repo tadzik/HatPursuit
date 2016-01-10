@@ -18,7 +18,23 @@ Rectangle {
         text: Math.floor(distance).toString()
         font.pixelSize: 25
 
-        Component.onCompleted: { x = 25; y = 10; }
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.topMargin: 10
+        anchors.leftMargin: 25
+    }
+
+    Text {
+        property real distance: 0
+
+        id: highScore
+        text: "Top Score: miljart"
+        font.pixelSize: 25
+
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.topMargin: 10
+        anchors.rightMargin: 25
     }
 
     Rectangle {
