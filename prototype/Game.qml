@@ -112,7 +112,7 @@ Rectangle {
         opacity: 0
         MouseArea {
             anchors.fill: parent
-            onClicked: Engine.onLeft()
+            onClicked: Engine.on_left()
         }
     }
 
@@ -125,7 +125,7 @@ Rectangle {
         opacity: 0
         MouseArea {
             anchors.fill: parent
-            onClicked: Engine.onRight()
+            onClicked: Engine.on_right()
         }
     }
 
