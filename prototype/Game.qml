@@ -14,8 +14,8 @@ Rectangle {
     property int layer_hats:    3
     property int layer_ui:    100
 
-    Keys.onLeftPressed:  Engine.onLeft()
-    Keys.onRightPressed: Engine.onRight()
+    Keys.onLeftPressed:  Engine.on_left()
+    Keys.onRightPressed: Engine.on_right()
 
     Text {
         property real distance: 0

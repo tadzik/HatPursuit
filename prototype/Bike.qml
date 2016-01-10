@@ -8,17 +8,17 @@ Item {
     property string color: "green"
     property real rotationAngle: 0
 
-    function turnLeft() {
+    function turn_left() {
         velocity = -8
         rotationAngle = -15
     }
 
-    function turnRight() {
+    function turn_right() {
         velocity = 8
         rotationAngle = 15
     }
 
-    function attachHat(hat) {
+    function attach_hat(hat) {
         hat.anchors.top = handle.top
         hat.anchors.horizontalCenter = body.horizontalCenter
     }

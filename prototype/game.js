@@ -14,22 +14,24 @@ var car_colors = [
 var bike = null
 var hatDrop = null
 
-function onLeft() {
+function on_left() {
     if (crashed) return
-    bike.turnLeft()
+    bike.turn_left()
 }
 
-function onRight() {
+function on_right() {
     if (crashed) return
-    bike.turnRight()
+    bike.turn_right()
 }
 
-function shouldHatDrop() {
+function should_hat_drop() {
     return hatDrop == null
 }
 
-function generateHat() {
+function generate_hat() {
     return topHatComponent.createObject(screen, {
+        primaryColor: get_hat_color(),
+        secondaryColor: get_hat_color(),
         z: screen.layer_hats
     })
 }
@@ -87,7 +89,7 @@ function after_crash() {
 }
 
 var colors = [];
-function get_color() {
+function get_car_color() {
     var index = Math.floor(Math.random() * colors.length);
 
     if(colors.length == 0) {
@@ -95,6 +97,10 @@ function get_color() {
     }
 
     return colors.splice(index, 1)[0];
+}
+
+function get_hat_color() {
+    return get_car_color()
 }
 
 function update() {
@@ -106,7 +112,7 @@ function update() {
         var hat = topHatComponent.createObject(bike, {
             z: screen.layer_hats
         })
-        bike.attachHat(hat)
+        bike.attach_hat(hat)
     }
     if (crashed) {
         return after_crash()
@@ -171,7 +177,7 @@ function update() {
             x: 200,
             y: 0,
             z: screen.layer_cars,
-            color: get_color()
+            color: get_car_color()
         });
         c.y -= c.height * 1.9 // space between cars
         c.x = Math.random() * (screen.width - c.width)
@@ -182,8 +188,8 @@ function update() {
             cars.push(c)
         }
 
-        if (shouldHatDrop()) {
-            hatDrop = generateHat()
+        if (should_hat_drop()) {
+            hatDrop = generate_hat()
             if ((c.x + c.width/2) < screen.width/2) {
                 hatDrop.x = c.x + 2 * c.width
             } else {
