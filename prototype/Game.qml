@@ -31,6 +31,11 @@ Rectangle {
         anchors.leftMargin: 25
         z: layer_ui
 
+        function getDB() {
+            return LocalStorage.openDatabaseSync("QQmlHatPursuitDb",
+                    "1.0", "The HatPursuit QML SQL!", 1000000, config)
+        }
+
         function config(db) {
             db.transaction(
                 function (tx) {
@@ -41,8 +46,7 @@ Rectangle {
         }
 
         function getHighScore() {
-            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000, config),
-                highScore;
+            var db = getDB(), highScore;
 
             db.transaction(
                 function (tx) {
@@ -54,7 +58,7 @@ Rectangle {
         }
 
         function addScore(score) {
-            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000, config);
+            var db = getDB();
 
             db.transaction(
                 function (tx) {
