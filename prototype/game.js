@@ -84,6 +84,11 @@ function after_crash() {
     || bike.x > screen.width
     || bike.x + bike.width < 0) {
         console.log("Score:", score.text);
+        if (score.text > score.getHighScore()) {
+            console.log("KURWA RZECZYWIŚCIE:", score.text);
+        }
+
+        score.addScore(score.text);
         Qt.quit();
     }
 }

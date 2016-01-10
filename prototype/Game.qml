@@ -1,4 +1,5 @@
 import QtQuick 2.0;
+import QtQuick.LocalStorage 2.0;
 import "game.js" as Engine
 
 Rectangle {
@@ -29,6 +30,42 @@ Rectangle {
         anchors.topMargin: 10
         anchors.leftMargin: 25
         z: layer_ui
+
+        Component.onCompleted: config()
+
+        function config() {
+            // move it?
+            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000);
+
+            db.transaction(
+                function (tx) {
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score TEXT)');
+                }
+            );
+        }
+
+        function getHighScore() {
+            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000),
+                highScore;
+
+            db.transaction(
+                function (tx) {
+                    var rs = tx.executeSql('SELECT * FROM Score ORDER BY score DESC');
+                    highScore = rs.rows.item(0).score;
+                }
+            );
+            return highScore;
+        }
+
+        function addScore(score) {
+            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000);
+
+            db.transaction(
+                function (tx) {
+                    tx.executeSql('INSERT INTO Score VALUES(?)', [ score == null ? '0' : score.toString() ]);
+                }
+            );
+        }
     }
 
     Text {
