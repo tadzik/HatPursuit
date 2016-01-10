@@ -33,13 +33,14 @@ Rectangle {
 
         function getDB() {
             return LocalStorage.openDatabaseSync("QQmlHatPursuitDb",
-                    "1.0", "The HatPursuit QML SQL!", 1000000, config)
+                    "1.0", "The HatPursuit QML SQL!", 1000, config)
         }
 
         function config(db) {
             db.transaction(
                 function (tx) {
                     tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score TEXT)');
+                    tx.executeSql('INSERT INTO Score VALUES("0")');
                 }
             );
             db.changeVersion("", "1.0");
@@ -50,8 +51,8 @@ Rectangle {
 
             db.transaction(
                 function (tx) {
-                    var rs = tx.executeSql('SELECT * FROM Score ORDER BY score DESC');
-                    highScore = rs.rows.item(0) == null ? '0' : rs.rows.item(0).score;
+                    var rs = tx.executeSql('SELECT * FROM Score');
+                    highScore = rs.rows.item(0).score;
                 }
             );
             return highScore;
@@ -63,7 +64,7 @@ Rectangle {
             db.transaction(
                 function (tx) {
                     // save only if higher?
-                    tx.executeSql('INSERT INTO Score VALUES(?)', [ score == null ? '0' : score.toString() ]);
+                    tx.executeSql('UPDATE Score SET score = ?', [ score.toString() ]);
                 }
             );
         }
