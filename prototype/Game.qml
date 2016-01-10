@@ -31,21 +31,17 @@ Rectangle {
         anchors.leftMargin: 25
         z: layer_ui
 
-        Component.onCompleted: config()
-
-        function config() {
-            // move it?
-            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000);
-
+        function config(db) {
             db.transaction(
                 function (tx) {
                     tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score TEXT)');
                 }
             );
+            db.changeVersion("", "1.0");
         }
 
         function getHighScore() {
-            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000),
+            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000, config),
                 highScore;
 
             db.transaction(
@@ -58,7 +54,7 @@ Rectangle {
         }
 
         function addScore(score) {
-            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000);
+            var db = LocalStorage.openDatabaseSync("QQmlHatPursuitDb", "1.0", "The HatPursuit QML SQL!", 1000000, config);
 
             db.transaction(
                 function (tx) {
