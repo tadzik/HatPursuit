@@ -4,6 +4,7 @@ Item {
     width: 30
     height: 20
 
+    property string name: "bowler"
     property string primaryColor: "black"
     property string secondaryColor: "red"
     property real rotationAngle: 10

@@ -18,7 +18,7 @@ Rectangle {
     Keys.onLeftPressed:  Engine.on_left()
     Keys.onRightPressed: Engine.on_right()
 
-    function getDB() {
+    function get_DB() {
         return LocalStorage.openDatabaseSync("QQmlHatPursuitDb",
                 "1.0", "The HatPursuit QML SQL!", 1000, config)
     }
@@ -28,6 +28,8 @@ Rectangle {
             function (tx) {
                 tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score TEXT)');
                 tx.executeSql('INSERT INTO Score VALUES("0")');
+
+                tx.executeSql('CREATE TABLE IF NOT EXISTS Hats(hat TEXT, datetime STRING)');
             }
         );
         db.changeVersion("", "1.0");
@@ -47,7 +49,7 @@ Rectangle {
         z: layer_ui
 
         function getHighScore() {
-            var db = parent.getDB(), highScore;
+            var db = parent.get_DB(), highScore;
 
             db.transaction(
                 function (tx) {
@@ -59,7 +61,7 @@ Rectangle {
         }
 
         function addScore(score) {
-            var db = parent.getDB();
+            var db = parent.get_DB();
 
             db.transaction(
                 function (tx) {

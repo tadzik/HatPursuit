@@ -14,6 +14,10 @@ var car_colors = [
 ];
 var bike = null
 var hatDrop = null
+var hats = {
+    "bowler": bowlerComponent,
+    "tophat": topHatComponent
+};
 
 function on_left() {
     if (crashed) return
@@ -38,6 +42,16 @@ function generate_hat() {
         z: screen.layer_hats,
         component: components[idx],
     })
+}
+
+function deserialize_hat(hatString) {
+    var hat = hatString.split(",");
+    return hats[hat[0]].createObject(bike, {
+        primaryColor: hat[1],
+        secondaryColor: hat[2],
+        z: screen.layer_hats,
+        component: hats[hat[0]]
+    });
 }
 
 function new_stripe(x, i) {
@@ -116,10 +130,10 @@ function update() {
     }
     if (!bike) {
         bike = init_bike()
-        var hat = topHatComponent.createObject(bike, {
-            z: screen.layer_hats
-        })
-        bike.attach_hat(hat)
+        var hat = bike.get_latest_hat();
+        if (hat != null) {
+            bike.attach_hat(deserialize_hat(hat))
+        }
     }
     if (crashed) {
         return after_crash()
@@ -208,10 +222,11 @@ function update() {
     if (hatDrop && collides(bike, hatDrop)) {
         var clone = hatDrop.component.createObject(bike, {
             primaryColor: hatDrop.primaryColor,
-            secondaryColor: hatDrop.primaryColor,
+            secondaryColor: hatDrop.secondaryColor,
             component: hatDrop.component,
         })
         bike.attach_hat(clone)
+        bike.store_hat(clone);
         hatDrop.destroy()
         hatDrop = null
     }

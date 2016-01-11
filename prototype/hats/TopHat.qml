@@ -4,6 +4,7 @@ Item {
     width: 30
     height: 30
 
+    property string name: "tophat"
     property string primaryColor: "black"
     property string secondaryColor: "red"
     property real rotationAngle: 10

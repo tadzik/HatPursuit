@@ -9,6 +9,11 @@ Item {
     property real rotationAngle: 0
     property var hat: null
 
+    function getFormattedDate() {
+        var date = new Date();
+        return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    }
+
     function turn_left() {
         velocity = -8
         rotationAngle = -15
@@ -17,6 +22,38 @@ Item {
     function turn_right() {
         velocity = 8
         rotationAngle = 15
+    }
+
+    function get_latest_hat() {
+        var db = parent.get_DB(), hat = null;
+
+        db.transaction(
+            function (tx) {
+                var rs = tx.executeSql('SELECT * FROM Hats ORDER BY datetime DESC LIMIT 1');
+                if (rs.rows.item(0)) {
+                    hat = rs.rows.item(0).hat;
+                }
+            }
+        );
+
+        return hat;
+    }
+
+    function store_hat(hat) {
+        var db = parent.get_DB();
+
+        console.log(hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor,
+                    getFormattedDate());
+
+        db.transaction(
+            function (tx) {
+                // hat.toString() ??
+                tx.executeSql('INSERT INTO Hats VALUES (?, ?)', [
+                    hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor,
+                    getFormattedDate()
+                ]);
+            }
+        );
     }
 
     function attach_hat(newHat) {
