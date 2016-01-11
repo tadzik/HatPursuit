@@ -58,9 +58,6 @@ Item {
     function store_hat(hat) {
         var db = parent.get_DB();
 
-        console.log(hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor,
-                    getFormattedDate());
-
         db.transaction(
             function (tx) {
                 // hat.toString() ??
