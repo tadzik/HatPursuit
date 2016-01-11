@@ -18,6 +18,21 @@ Rectangle {
     Keys.onLeftPressed:  Engine.on_left()
     Keys.onRightPressed: Engine.on_right()
 
+    function getDB() {
+        return LocalStorage.openDatabaseSync("QQmlHatPursuitDb",
+                "1.0", "The HatPursuit QML SQL!", 1000, config)
+    }
+
+    function config(db) {
+        db.transaction(
+            function (tx) {
+                tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score TEXT)');
+                tx.executeSql('INSERT INTO Score VALUES("0")');
+            }
+        );
+        db.changeVersion("", "1.0");
+    }
+
     Text {
         property real distance: 0
 
@@ -31,23 +46,8 @@ Rectangle {
         anchors.leftMargin: 25
         z: layer_ui
 
-        function getDB() {
-            return LocalStorage.openDatabaseSync("QQmlHatPursuitDb",
-                    "1.0", "The HatPursuit QML SQL!", 1000, config)
-        }
-
-        function config(db) {
-            db.transaction(
-                function (tx) {
-                    tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score TEXT)');
-                    tx.executeSql('INSERT INTO Score VALUES("0")');
-                }
-            );
-            db.changeVersion("", "1.0");
-        }
-
         function getHighScore() {
-            var db = getDB(), highScore;
+            var db = parent.getDB(), highScore;
 
             db.transaction(
                 function (tx) {
@@ -59,7 +59,7 @@ Rectangle {
         }
 
         function addScore(score) {
-            var db = getDB();
+            var db = parent.getDB();
 
             db.transaction(
                 function (tx) {
