@@ -39,6 +39,22 @@ Item {
         return hat;
     }
 
+    function hat_exists(hat) {
+        var db = parent.get_DB(), exists = false;
+
+        db.transaction(
+            function (tx) {
+                var rs = tx.executeSql('SELECT * FROM Hats WHERE hat = ?', [ hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor ]);
+
+                if (rs.rows.item(0)) {
+                    exists = true;
+                }
+            }
+        );
+
+        return exists;
+    }
+
     function store_hat(hat) {
         var db = parent.get_DB();
 

@@ -226,7 +226,9 @@ function update() {
             component: hatDrop.component,
         })
         bike.attach_hat(clone)
-        bike.store_hat(clone);
+        if (!bike.hat_exists(clone)) {
+            bike.store_hat(clone);
+        }
         hatDrop.destroy()
         hatDrop = null
     }
