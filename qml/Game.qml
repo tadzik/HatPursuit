@@ -73,7 +73,7 @@ Rectangle {
                     highScore = rs.rows.item(0).score;
                 }
             );
-            return highScore;
+            return parseInt(highScore);
         }
 
         function addScore(score) {
@@ -81,10 +81,11 @@ Rectangle {
 
             db.transaction(
                 function (tx) {
-                    // save only if higher?
                     tx.executeSql('UPDATE Score SET score = ?', [ score.toString() ]);
                 }
             );
+
+            highScore.bestScore = score
         }
     }
 

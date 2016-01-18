@@ -28,6 +28,7 @@ function mode_menu() {
 function mode_game() {
     crashed = false
     bike = null
+    score.distance = 0
     running = true
     screen.mode_game()
 }
@@ -115,7 +116,9 @@ function after_crash() {
     || bike.x > screen.width
     || bike.x + bike.width < 0) {
         console.log("Score:", score.text);
-        if (score.text > score.getHighScore()) {
+        console.log("Current high score is " + score.getHighScore());
+        if (score.distance > score.getHighScore()) {
+            console.log("Updating high score");
             score.addScore(score.text);
         }
         bike.destroy()
