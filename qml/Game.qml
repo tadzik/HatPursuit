@@ -151,16 +151,17 @@ Rectangle {
 
     Text {
         id: logo
-        font.pixelSize: 96
+        font.pixelSize: 72
+        font.bold: true
         text: "HatPursuit"
         z: layer_ui
-        anchors.bottom: parent.verticalCenter
+        y: parent.height / 3
         anchors.horizontalCenter: parent.horizontalCenter
     }
 
     Text {
         id: startbutton
-        font.pixelSize: 48
+        font.pixelSize: 72
         text: "Start game"
         z: layer_ui
         anchors.top: parent.verticalCenter

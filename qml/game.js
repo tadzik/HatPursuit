@@ -8,6 +8,7 @@ var bowlerComponent = Qt.createComponent("hats/Bowler.qml")
 var crashed = false
 var crash_direction = 1
 var base_velocity = 8
+var car_spacing = 2.5
 var car_colors = [
     "red", "green", "blue", "orange", "lime", "steelblue",
     "crimson", "darkgoldenrod", "orchid", "deeppink"
@@ -220,7 +221,7 @@ function update() {
             z: screen.layer_cars,
             color: get_car_color()
         });
-        c.y -= c.height * 1.9 // space between cars
+        c.y -= c.height * car_spacing // space between cars
         c.x = Math.random() * (screen.width - c.width)
         c.velocity = base_velocity
         if (c === null) {

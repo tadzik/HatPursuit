@@ -45,5 +45,7 @@ DISTFILES += \
     qml/Car.qml \
     qml/Game.qml \
     qml/Stripe.qml \
-    qml/game.js
+    qml/game.js \
+    qml/hats/Bowler.qml \
+    qml/hats/TopHat.qml
 
