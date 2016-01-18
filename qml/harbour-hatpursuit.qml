@@ -35,9 +35,9 @@ import "pages"
 ApplicationWindow
 {
     initialPage: Component { Game { } }
-    cover: Qt.resolvedUrl("cover/CoverPage.qml")
-    allowedOrientations: Orientation.All
-    _defaultPageOrientations: Orientation.All
+    //cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    allowedOrientations: Orientation.PortraitMask
+    _defaultPageOrientations: Orientation.PortraitMask
 }
 
 

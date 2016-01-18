@@ -30,44 +30,58 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-
+import "../game.js" as Engine
 
 Page {
     id: page
 
-    // To enable PullDownMenu, place our content in a SilicaFlickable
     SilicaFlickable {
         anchors.fill: parent
-
-        // PullDownMenu and PushUpMenu must be declared in SilicaFlickable, SilicaListView or SilicaGridView
-        PullDownMenu {
-            MenuItem {
-                text: qsTr("Show Page 2")
-                onClicked: pageStack.push(Qt.resolvedUrl("SecondPage.qml"))
-            }
-        }
-
-        // Tell SilicaFlickable the height of its content.
         contentHeight: column.height
-
-        // Place our content in a Column.  The PageHeader is always placed at the top
-        // of the page, followed by our content.
         Column {
             id: column
-
             width: page.width
-            spacing: Theme.paddingLarge
             PageHeader {
-                title: qsTr("UI Template")
+                title: "Settings"
             }
-            Label {
-                x: Theme.paddingLarge
-                text: qsTr("Hello Sailors")
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
+
+            Slider {
+                label: "Car spacing"
+                width: parent.width
+                minimumValue: 1
+                maximumValue: 5
+                stepSize: 0.5
+                value: Engine.car_spacing
+                valueText: value
+                onValueChanged: {
+                    Engine.car_spacing = value;
+                }
+            }
+            Slider {
+                label: "Car speed"
+                width: parent.width
+                minimumValue: 1
+                maximumValue: 10
+                stepSize: 1
+                value: Engine.base_velocity
+                valueText: value
+                onValueChanged: {
+                    Engine.base_velocity = value;
+                }
+            }
+            Slider {
+                label: "Bike turn speed"
+                width: parent.width
+                minimumValue: 1
+                maximumValue: 15
+                stepSize: 1
+                value: Engine.bike_turn_velocity
+                valueText: value
+                onValueChanged: {
+                    console.log("Now is " + value);
+                    Engine.bike_turn_velocity = value;
+                }
             }
         }
     }
 }
-
-

@@ -9,6 +9,7 @@ var crashed = false
 var crash_direction = 1
 var base_velocity = 8
 var car_spacing = 2.5
+var bike_turn_velocity = 8
 var car_colors = [
     "red", "green", "blue", "orange", "lime", "steelblue",
     "crimson", "darkgoldenrod", "orchid", "deeppink"
@@ -87,6 +88,7 @@ function init_bike() {
     b.x = (screen.width - b.width) / 2
     b.z = screen.layer_cars
     b.color = "green"
+    b.turnVelocity = bike_turn_velocity
     return b
 }
 

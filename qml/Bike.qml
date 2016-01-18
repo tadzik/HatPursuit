@@ -5,6 +5,7 @@ Item {
     height: 100
 
     property int velocity: 0
+    property int turnVelocity: 8
     property string color: "green"
     property real rotationAngle: 0
     property var hat: null
@@ -15,12 +16,12 @@ Item {
     }
 
     function turn_left() {
-        velocity = -8
+        velocity = -turnVelocity
         rotationAngle = -15
     }
 
     function turn_right() {
-        velocity = 8
+        velocity = turnVelocity
         rotationAngle = 15
     }
 

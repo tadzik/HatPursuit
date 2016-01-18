@@ -18,8 +18,6 @@ SOURCES += src/harbour-hatpursuit.cpp
 
 OTHER_FILES += qml/harbour-hatpursuit.qml \
     qml/cover/CoverPage.qml \
-    qml/pages/FirstPage.qml \
-    qml/pages/SecondPage.qml \
     rpm/harbour-hatpursuit.changes.in \
     rpm/harbour-hatpursuit.spec \
     rpm/harbour-hatpursuit.yaml \
@@ -47,5 +45,6 @@ DISTFILES += \
     qml/Stripe.qml \
     qml/game.js \
     qml/hats/Bowler.qml \
-    qml/hats/TopHat.qml
+    qml/hats/TopHat.qml \
+    qml/pages/SettingsPage.qml
 
