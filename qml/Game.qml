@@ -35,6 +35,22 @@ Rectangle {
         db.changeVersion("", "1.0");
     }
 
+    function mode_menu() {
+        score.visible = false
+        logo.visible = true
+        startbutton.visible = true
+    }
+
+    function mode_game() {
+        score.visible = true
+        logo.visible = false
+        startbutton.visible = false
+    }
+
+    Component.onCompleted: {
+        Engine.mode_menu()
+    }
+
     Text {
         property real distance: 0
 
@@ -129,6 +145,28 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: Engine.on_right()
+        }
+    }
+
+    Text {
+        id: logo
+        font.pixelSize: 96
+        text: "HatPursuit"
+        z: layer_ui
+        anchors.bottom: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+    }
+
+    Text {
+        id: startbutton
+        font.pixelSize: 48
+        text: "Start game"
+        z: layer_ui
+        anchors.top: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        MouseArea {
+            anchors.fill: parent
+            onClicked: Engine.mode_game()
         }
     }
 

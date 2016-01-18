@@ -19,6 +19,19 @@ var hats = {
     "tophat": topHatComponent
 };
 
+var running = true
+function mode_menu() {
+    running = false
+    screen.mode_menu()
+}
+
+function mode_game() {
+    crashed = false
+    bike = null
+    running = true
+    screen.mode_game()
+}
+
 function on_left() {
     if (crashed) return
     bike.turn_left()
@@ -71,7 +84,7 @@ function init_bike() {
     b.anchors.bottomMargin = 50
     b.x = (screen.width - b.width) / 2
     b.z = screen.layer_cars
-    b.color =  "green"
+    b.color = "green"
     return b
 }
 
@@ -105,7 +118,8 @@ function after_crash() {
         if (score.text > score.getHighScore()) {
             score.addScore(score.text);
         }
-        Qt.quit();
+        bike.destroy()
+        mode_menu()
     }
 }
 
@@ -128,15 +142,17 @@ function update() {
     if (stripes.length == 0) {
         init_stripes()
     }
-    if (!bike) {
-        bike = init_bike()
-        var hat = bike.get_latest_hat();
-        if (hat != null) {
-            bike.attach_hat(deserialize_hat(hat))
+    if (running) {
+        if (!bike) {
+            bike = init_bike()
+            var hat = bike.get_latest_hat();
+            if (hat !== null) {
+                bike.attach_hat(deserialize_hat(hat))
+            }
         }
-    }
-    if (crashed) {
-        return after_crash()
+        if (crashed) {
+            return after_crash()
+        }
     }
 
     var newcars = []
@@ -170,24 +186,26 @@ function update() {
         }
     }
 
-    score.distance += 0.1;
-    bike.x += bike.velocity;
-    if (bike.x + bike.velocity < leftBorder.width) {
-        crashed = true;
-        crash_direction = -1;
-    }
-    if ((bike.x + bike.velocity) > (rightBorder.x - bike.width)) {
-        crashed = true;
-        crash_direction = 1;
-    }
-
-    for (var i = 0; i < cars.length; i++) {
-        if (collides(bike, cars[i])) {
-            console.log("CRASH")
+    if (running) {
+        score.distance += 0.1;
+        bike.x += bike.velocity;
+        if (bike.x + bike.velocity < leftBorder.width) {
             crashed = true;
-            if ((bike.x + bike.width / 2)
-            < (cars[i].x + cars[i].width / 2)) {
-                crash_direction = -1
+            crash_direction = -1;
+        }
+        if ((bike.x + bike.velocity) > (rightBorder.x - bike.width)) {
+            crashed = true;
+            crash_direction = 1;
+        }
+
+        for (var i = 0; i < cars.length; i++) {
+            if (collides(bike, cars[i])) {
+                console.log("CRASH")
+                crashed = true;
+                if ((bike.x + bike.width / 2)
+                < (cars[i].x + cars[i].width / 2)) {
+                    crash_direction = -1
+                }
             }
         }
     }
@@ -202,7 +220,7 @@ function update() {
         c.y -= c.height * 1.9 // space between cars
         c.x = Math.random() * (screen.width - c.width)
         c.velocity = base_velocity
-        if (c == null) {
+        if (c === null) {
             console.log("ERROR: " + carComponent.errorString())
         } else {
             cars.push(c)
@@ -219,17 +237,19 @@ function update() {
         }
     }
 
-    if (hatDrop && collides(bike, hatDrop)) {
-        var clone = hatDrop.component.createObject(bike, {
-            primaryColor: hatDrop.primaryColor,
-            secondaryColor: hatDrop.secondaryColor,
-            component: hatDrop.component,
-        })
-        bike.attach_hat(clone)
-        if (!bike.hat_exists(clone)) {
-            bike.store_hat(clone);
+    if (running) {
+        if (hatDrop && collides(bike, hatDrop)) {
+            var clone = hatDrop.component.createObject(bike, {
+                primaryColor: hatDrop.primaryColor,
+                secondaryColor: hatDrop.secondaryColor,
+                component: hatDrop.component,
+            })
+            bike.attach_hat(clone)
+            if (!bike.hat_exists(clone)) {
+                bike.store_hat(clone);
+            }
+            hatDrop.destroy()
+            hatDrop = null
         }
-        hatDrop.destroy()
-        hatDrop = null
     }
 }
