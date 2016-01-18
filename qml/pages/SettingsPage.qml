@@ -34,6 +34,7 @@ import "../game.js" as Engine
 
 Page {
     id: page
+    property var engine
 
     SilicaFlickable {
         anchors.fill: parent
@@ -51,10 +52,10 @@ Page {
                 minimumValue: 1
                 maximumValue: 5
                 stepSize: 0.5
-                value: Engine.car_spacing
+                value: page.engine.car_spacing
                 valueText: value
                 onValueChanged: {
-                    Engine.car_spacing = value;
+                    page.engine.car_spacing = value;
                 }
             }
             Slider {
@@ -63,10 +64,10 @@ Page {
                 minimumValue: 1
                 maximumValue: 10
                 stepSize: 1
-                value: Engine.base_velocity
+                value: page.engine.base_velocity
                 valueText: value
                 onValueChanged: {
-                    Engine.base_velocity = value;
+                    page.engine.base_velocity = value;
                 }
             }
             Slider {
@@ -75,11 +76,11 @@ Page {
                 minimumValue: 1
                 maximumValue: 15
                 stepSize: 1
-                value: Engine.bike_turn_velocity
+                value: page.engine.bike_turn_velocity
                 valueText: value
                 onValueChanged: {
                     console.log("Now is " + value);
-                    Engine.bike_turn_velocity = value;
+                    page.engine.bike_turn_velocity = value;
                 }
             }
         }

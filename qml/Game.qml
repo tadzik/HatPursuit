@@ -188,7 +188,7 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             MouseArea {
                 anchors.fill: parent
-                onClicked: pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"))
+                onClicked: pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"), { engine: Engine })
             }
         }
 
