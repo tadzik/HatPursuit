@@ -10,10 +10,34 @@ var crash_direction = 1
 var base_velocity = 8
 var car_spacing = 2.5
 var bike_turn_velocity = 8
-var car_colors = [
-    "red", "green", "blue", "orange", "lime", "steelblue",
-    "crimson", "darkgoldenrod", "orchid", "deeppink"
-];
+
+var all_colors = [
+    "aliceblue", "aqua", "aquamarine", "azure", "beige", "bisque",
+    "black", "blue", "burlywood",
+    "chartreuse", "coral", "cornflowerblue", "cornsilk", "crimson", "cyan",
+    "darkgoldenrod", "darkgreen",
+    "darkkhaki", "darkmagenta", "darkolivegreen", "darkorange",
+    "darkslategray",
+    "darkturquoise", "darkviolet", "deeppink", "deepskyblue",
+    "firebrick", "fuchsia",
+    "gold", "goldenrod",
+    "hotpink", "indigo", "ivory", "khaki", "lavender",
+    "lawngreen", "lemonchiffon", "lightcoral",
+    "lightgoldenrodyellow", "lightgrey",
+    "lightseagreen", "lightskyblue",
+    "lightsteelblue", "limegreen", "maroon",
+    "mediumaquamarine", "mediumblue", "mediumorchid", "mediumseagreen",
+    "mediumspringgreen",
+    "midnightblue", "mintcream", "mistyrose", "moccasin",
+    "oldlace", "orange", "orangered", "orchid",
+    "papayawhip", "peachpuff", "peru",
+    "pink", "plum", "powderblue", "purple", "rosybrown", "royalblue", "saddlebrown",
+    "salmon", "sandybrown", "seashell", "sienna", "silver", "skyblue",
+    "slateblue", "snow", "springgreen", "tan",
+    "thistle", "tomato", "turquoise", "violet", "wheat",
+    "yellow", "yellowgreen"
+]
+
 var bike = null
 var hatDrop = null
 var hats = {
@@ -134,8 +158,8 @@ var colors = [];
 function get_car_color() {
     var index = Math.floor(Math.random() * colors.length);
 
-    if(colors.length == 0) {
-        colors = car_colors.slice();
+    if (colors.length == 0) {
+        colors = all_colors.slice();
     }
 
     return colors.splice(index, 1)[0];
@@ -169,6 +193,7 @@ function update_cars() {
             z: screen.layer_cars,
             color: get_car_color()
         });
+        console.log("Spawning car with color " + c.color)
         c.y -= c.height * car_spacing // space between cars
         c.x = Math.random() * (screen.width - c.width)
         c.velocity = base_velocity
@@ -180,6 +205,7 @@ function update_cars() {
 
         if (should_hat_drop()) {
             hatDrop = generate_hat()
+            console.log("Generating hat with colors " + hatDrop.primaryColor + ", " + hatDrop.secondaryColor)
             if ((c.x + c.width/2) < screen.width/2) {
                 hatDrop.x = c.x + 2 * c.width
             } else {
