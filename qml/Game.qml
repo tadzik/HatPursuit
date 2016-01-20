@@ -44,6 +44,7 @@ Page {
             score.visible = false
             logo.visible = true
             startButton.visible = true
+            loadoutButton.visible = true
             settingsButton.visible = true
         }
 
@@ -51,6 +52,7 @@ Page {
             score.visible = true
             logo.visible = false
             startButton.visible = false
+            loadoutButton.visible = false
             settingsButton.visible = false
         }
 
@@ -166,30 +168,31 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
-        Text {
+        MainMenuButton {
             id: startButton
-            font.pixelSize: 72
-            text: "Start game"
+            label: "Start game"
             z: screen.layer_ui
             anchors.top: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            MouseArea {
-                anchors.fill: parent
-                onClicked: Engine.mode_game()
-            }
+            cb: function () { Engine.mode_game() }
         }
 
-        Text {
-            id: settingsButton
-            font.pixelSize: 72
-            text: "Settings"
+        MainMenuButton {
+            id: loadoutButton
+            label: "Browse hats"
             z: screen.layer_ui
             anchors.top: startButton.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            MouseArea {
-                anchors.fill: parent
-                onClicked: pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"), { engine: Engine })
-            }
+            cb: function() { pageStack.push(Qt.resolvedUrl("pages/LoadoutPage.qml"), { engine: Engine, db: screen.get_DB() }) }
+        }
+
+        MainMenuButton {
+            id: settingsButton
+            label: "Settings"
+            z: screen.layer_ui
+            anchors.top: loadoutButton.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            cb: function() { pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"), { engine: Engine }) }
         }
 
         Timer {

@@ -8,7 +8,6 @@ Item {
     property string primaryColor: "black"
     property string secondaryColor: "red"
     property real rotationAngle: 10
-    property var component: null
 
     Rectangle {
         id: topThing

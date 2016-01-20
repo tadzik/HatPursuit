@@ -46,5 +46,7 @@ DISTFILES += \
     qml/game.js \
     qml/hats/Bowler.qml \
     qml/hats/TopHat.qml \
-    qml/pages/SettingsPage.qml
+    qml/pages/SettingsPage.qml \
+    qml/pages/LoadoutPage.qml \
+    qml/MainMenuButton.qml
 
