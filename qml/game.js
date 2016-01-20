@@ -144,23 +144,7 @@ function get_hat_color() {
     return get_car_color()
 }
 
-function update() {
-    if (stripes.length == 0) {
-        init_stripes()
-    }
-    if (running) {
-        if (!bike) {
-            bike = init_bike()
-            var hat = bike.get_latest_hat();
-            if (hat !== null) {
-                bike.attach_hat(deserialize_hat(hat))
-            }
-        }
-        if (crashed) {
-            return after_crash()
-        }
-    }
-
+function update_cars() {
     var newcars = []
     var roomForMore = true
     for (var i = 0; i < cars.length; i++) {
@@ -176,45 +160,6 @@ function update() {
         }
     }
     cars = newcars
-
-    for (var i = 0; i < stripes.length; i++) {
-        stripes[i].y += base_velocity
-        if (stripes[i].y > screen.height) {
-            stripes[i].y -= stripes[i].height * 0.5 * stripes.length
-        }
-    }
-
-    if (hatDrop) {
-        hatDrop.y += base_velocity
-        if (hatDrop.y > screen.height) {
-            hatDrop.destroy()
-            hatDrop = null
-        }
-    }
-
-    if (running) {
-        score.distance += 0.1;
-        bike.x += bike.velocity;
-        if (bike.x + bike.velocity < leftBorder.width) {
-            crashed = true;
-            crash_direction = -1;
-        }
-        if ((bike.x + bike.velocity) > (rightBorder.x - bike.width)) {
-            crashed = true;
-            crash_direction = 1;
-        }
-
-        for (var i = 0; i < cars.length; i++) {
-            if (collides(bike, cars[i])) {
-                console.log("CRASH")
-                crashed = true;
-                if ((bike.x + bike.width / 2)
-                < (cars[i].x + cars[i].width / 2)) {
-                    crash_direction = -1
-                }
-            }
-        }
-    }
 
     if (roomForMore) {
         var c = carComponent.createObject(screen, {
@@ -243,19 +188,84 @@ function update() {
         }
     }
 
-    if (running) {
-        if (hatDrop && collides(bike, hatDrop)) {
-            var clone = hatDrop.component.createObject(bike, {
-                primaryColor: hatDrop.primaryColor,
-                secondaryColor: hatDrop.secondaryColor,
-                component: hatDrop.component,
-            })
-            bike.attach_hat(clone)
-            if (!bike.hat_exists(clone)) {
-                bike.store_hat(clone);
-            }
+}
+
+function update_stripes() {
+    if (stripes.length == 0) {
+        init_stripes()
+    }
+
+    for (var i = 0; i < stripes.length; i++) {
+        stripes[i].y += base_velocity
+        if (stripes[i].y > screen.height) {
+            stripes[i].y -= stripes[i].height * 0.5 * stripes.length
+        }
+    }
+}
+
+function update_hats() {
+    if (hatDrop) {
+        hatDrop.y += base_velocity
+        if (hatDrop.y > screen.height) {
             hatDrop.destroy()
             hatDrop = null
         }
+    }
+}
+
+function update() {
+    update_stripes()
+    update_cars()
+    update_hats()
+
+    if (crashed) {
+        return after_crash()
+    }
+
+    if (!running) return
+
+    if (!bike) {
+        bike = init_bike()
+        var hat = bike.get_latest_hat();
+        if (hat !== null) {
+            bike.attach_hat(deserialize_hat(hat))
+        }
+    }
+
+
+    score.distance += 0.1;
+    bike.x += bike.velocity;
+    if (bike.x + bike.velocity < leftBorder.width) {
+        crashed = true;
+        crash_direction = -1;
+    }
+    if ((bike.x + bike.velocity) > (rightBorder.x - bike.width)) {
+        crashed = true;
+        crash_direction = 1;
+    }
+
+    for (var i = 0; i < cars.length; i++) {
+        if (collides(bike, cars[i])) {
+            console.log("CRASH")
+            crashed = true;
+            if ((bike.x + bike.width / 2)
+            < (cars[i].x + cars[i].width / 2)) {
+                crash_direction = -1
+            }
+        }
+    }
+
+    if (hatDrop && collides(bike, hatDrop)) {
+        var clone = hatDrop.component.createObject(bike, {
+            primaryColor: hatDrop.primaryColor,
+            secondaryColor: hatDrop.secondaryColor,
+            component: hatDrop.component,
+        })
+        bike.attach_hat(clone)
+        if (!bike.hat_exists(clone)) {
+            bike.store_hat(clone);
+        }
+        hatDrop.destroy()
+        hatDrop = null
     }
 }
