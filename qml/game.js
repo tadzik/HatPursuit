@@ -101,12 +101,13 @@ function init_stripes() {
 }
 
 // this shit better be correct for I really don't
-// want to debug this mess
-function collides(a, b) {
-    if (((b.x <= a.x && a.x <= b.x + b.width)
-    || b.x < a.x + a.width && a.x + a.width < b.x + b.width)
-    && ((b.y <= a.y && a.y <= b.y + b.height)
-    || b.y <= a.y + a.height && a.y + a.height <= b.y + b.height)) {
+// want to debug this mess -- me, 4.07.2015
+// update 20.01.2016: fuck it, I'll just copypaste from MDN
+function collides(rect1, rect2) {
+    if (rect1.x < rect2.x + rect2.width &&
+        rect1.x + rect1.width > rect2.x &&
+        rect1.y < rect2.y + rect2.height &&
+        rect1.height + rect1.y > rect2.y) {
         return true
     }
     return false
