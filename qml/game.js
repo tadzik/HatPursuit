@@ -9,7 +9,7 @@ var crashed = false
 var crash_direction = 1
 var base_velocity = 8
 var car_spacing = 2.5
-var bike_turn_velocity = 8
+var bike_turn_velocity = 6
 
 var all_colors = [
     "aliceblue", "aqua", "aquamarine", "azure", "beige", "bisque",
