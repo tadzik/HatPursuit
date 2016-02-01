@@ -10,6 +10,7 @@ var crash_direction = 1
 var base_velocity = 8
 var car_spacing = 2.5
 var bike_turn_velocity = 6
+var hat_autopickup = true
 
 var all_colors = [
     "aliceblue", "aqua", "aquamarine", "azure", "beige", "bisque",
@@ -355,13 +356,16 @@ function update() {
     }
 
     if (hatDrop && collides(bike, hatDrop)) {
-        var clone = hats[hatDrop.name].createObject(bike, {
-            primaryColor: hatDrop.primaryColor,
-            secondaryColor: hatDrop.secondaryColor,
-            component: hatDrop.component,
-        })
-        if (!hat_exists(clone)) {
-            store_hat(clone)
+        if (!hat_exists(hatDrop)) {
+            store_hat(hatDrop)
+        }
+        if (hat_autopickup) {
+            var clone = hats[hatDrop.name].createObject(bike, {
+                primaryColor: hatDrop.primaryColor,
+                secondaryColor: hatDrop.secondaryColor,
+                component: hatDrop.component,
+            })
+            bike.attach_hat(clone)
         }
         hatDrop.destroy()
         hatDrop = null
