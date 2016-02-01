@@ -26,7 +26,7 @@ var all_colors = [
     "lightgoldenrodyellow", "lightgrey",
     "lightseagreen", "lightskyblue",
     "lightsteelblue", "limegreen", "maroon",
-    "mediumaquamarine", "mediumblue", "mediumorchid", "mediumseagreen",
+    "mediumaquamarine", "mediumblue", "mediumseagreen",
     "mediumspringgreen",
     "midnightblue", "mintcream", "mistyrose", "moccasin",
     "oldlace", "orange", "orangered", "orchid",
