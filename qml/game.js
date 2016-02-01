@@ -127,12 +127,12 @@ function mode_game() {
 }
 
 function on_left() {
-    if (crashed) return
+    if (crashed || !running) return
     bike.turn_left()
 }
 
 function on_right() {
-    if (crashed) return
+    if (crashed || !running) return
     bike.turn_right()
 }
 
