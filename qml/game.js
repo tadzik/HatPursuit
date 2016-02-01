@@ -325,11 +325,12 @@ function update() {
 
     if (!bike) {
         bike = init_bike()
-        if (chosen_hat === null) {
-            chosen_hat = get_latest_hat()
+        var hat = chosen_hat
+        if (hat === null) {
+            hat = get_latest_hat()
         }
 
-        bike.attach_hat(create_hat_component(chosen_hat, bike))
+        bike.attach_hat(create_hat_component(hat, bike))
     }
 
 
