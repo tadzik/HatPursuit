@@ -113,6 +113,14 @@ function mode_game() {
     crashed = false
     bike = null
     score.distance = 0
+    for (var i = 0; i < cars.length; i++) {
+        cars[i].destroy()
+    }
+    cars = []
+    if (hatDrop) {
+        hatDrop.destroy()
+        hatDrop = null
+    }
     running = true
     screen.mode_game()
 }
