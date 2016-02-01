@@ -183,7 +183,13 @@ Page {
             z: screen.layer_ui
             anchors.top: startButton.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            cb: function() { pageStack.push(Qt.resolvedUrl("pages/LoadoutPage.qml"), { engine: Engine, db: screen.get_DB() }) }
+            cb: function() {
+                if (page.status !== null) {
+                    pageStack.push(Qt.resolvedUrl("pages/LoadoutPage.qml"), { engine: Engine, db: screen.get_DB() })
+                } else {
+                    console.log("NYI")
+                }
+            }
         }
 
         MainMenuButton {
@@ -192,7 +198,13 @@ Page {
             z: screen.layer_ui
             anchors.top: loadoutButton.bottom
             anchors.horizontalCenter: parent.horizontalCenter
-            cb: function() { pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"), { engine: Engine }) }
+            cb: function() {
+                if (page.status !== null) {
+                    pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"), { engine: Engine })
+                } else {
+                    console.log("NYI")
+                }
+            }
         }
 
         Timer {
