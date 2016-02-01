@@ -140,7 +140,9 @@ function should_hat_drop() {
 }
 
 function generate_hat() {
-    var components = [bowlerComponent, topHatComponent];
+    var components = []
+    // of course, Javascript doesn't (yet) have obj.values()
+    for (var key in hats) components.push(hats[key])
     var idx = Math.floor(Math.random() * components.length);
     return components[idx].createObject(screen, {
         primaryColor: get_hat_color(),
