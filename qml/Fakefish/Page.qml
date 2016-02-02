@@ -33,6 +33,7 @@ Item {
         Item {
             id: content
             anchors.top: closeButton.bottom
+            anchors.bottom: parent.bottom
         }
     }
 }

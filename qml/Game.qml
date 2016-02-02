@@ -187,7 +187,14 @@ Page {
                 if (page.status !== null) {
                     pageStack.push(Qt.resolvedUrl("pages/LoadoutPage.qml"), { engine: Engine, db: screen.get_DB() })
                 } else {
-                    console.log("NYI")
+                    var comp = Qt.createComponent("pages/LoadoutPage.qml")
+                    while (comp.status != Component.Ready) { } // yeah, a busyloop. Fite me irl
+                    var obj = comp.createObject(page, { engine: Engine, db: screen.get_DB() })
+                    screen.enabled = false
+                    obj.closed.connect(function() {
+                        obj.destroy()
+                        screen.enabled = true
+                    })
                 }
             }
         }
