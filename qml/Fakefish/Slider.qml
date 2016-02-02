@@ -18,7 +18,6 @@ Slider {
             var max = parent.maximumValue - parent.minimumValue
             var cur = parent.value - parent.minimumValue
             x = parent.x + parent.width * cur/max - width/2
-            console.log("Setting x to " + x)
         }
     }
 
