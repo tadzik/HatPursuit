@@ -1,0 +1,5 @@
+module Fakefish
+Page 0.1 Page.qml
+PageHeader 0.1 PageHeader.qml
+SilicaFlickable 0.1 SilicaFlickable.qml
+Slider 0.1 Slider.qml
