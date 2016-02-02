@@ -11,6 +11,11 @@ var base_velocity = 8
 var car_spacing = 2.5
 var bike_turn_velocity = 6
 var hat_autopickup = true
+var debug = false
+
+function log(msg) {
+    if (debug) console.log(msg)
+}
 
 var all_colors = [
     "aliceblue", "aqua", "aquamarine", "azure", "beige", "bisque",
@@ -154,7 +159,6 @@ function generate_hat() {
 }
 
 function create_hat_component(hat, parent) {
-    console.log(hat.name)
     return hats[hat.name].createObject(parent, {
         primaryColor: hat.primaryColor,
         secondaryColor: hat.secondaryColor,
@@ -215,10 +219,7 @@ function after_crash() {
     if (bike.rotationAngle % 360 == 0
     || bike.x > screen.width
     || bike.x + bike.width < 0) {
-        console.log("Score:", score.text);
-        console.log("Current high score is " + score.getHighScore());
         if (score.distance > score.getHighScore()) {
-            console.log("Updating high score");
             score.addScore(score.text);
         }
         bike.destroy()
@@ -265,7 +266,6 @@ function update_cars() {
             z: screen.layer_cars,
             color: get_car_color()
         });
-        console.log("Spawning car with color " + c.color)
         c.y -= c.height * car_spacing // space between cars
         c.x = Math.random() * (screen.width - c.width)
         c.velocity = base_velocity
@@ -277,7 +277,7 @@ function update_cars() {
 
         if (should_hat_drop()) {
             hatDrop = generate_hat()
-            console.log("Generating hat with colors " + hatDrop.primaryColor + ", " + hatDrop.secondaryColor)
+            log("Generating hat with colors " + hatDrop.primaryColor + ", " + hatDrop.secondaryColor)
             if ((c.x + c.width/2) < screen.width/2) {
                 hatDrop.x = c.x + 2 * c.width
             } else {
@@ -347,7 +347,6 @@ function update() {
 
     for (var i = 0; i < cars.length; i++) {
         if (collides(bike, cars[i])) {
-            console.log("CRASH")
             crashed = true;
             if ((bike.x + bike.width / 2)
             < (cars[i].x + cars[i].width / 2)) {
