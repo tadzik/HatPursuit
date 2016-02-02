@@ -18,7 +18,6 @@ Item {
             anchors.left: parent.left
 
             onClicked: {
-                console.log("Page.qml: X clicked")
                 page.closed()
             }
 
