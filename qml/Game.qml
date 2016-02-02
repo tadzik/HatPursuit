@@ -202,7 +202,10 @@ Page {
                 if (page.status !== null) {
                     pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"), { engine: Engine })
                 } else {
-                    console.log("NYI")
+                    var comp = Qt.createComponent("pages/SettingsPage.qml")
+                    while (comp.status != Component.Ready) { } // yeah, a busyloop. Fite me irl
+                    var obj = comp.createObject(page, { engine: Engine })
+                    screen.enabled = false
                 }
             }
         }
