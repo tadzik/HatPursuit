@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.LocalStorage 2.0
 import Sailfish.Silica 1.0
 import "game.js" as Engine
+import "HatPursuitDB.js" as DB
 
 Page {
     id: page
@@ -24,20 +25,7 @@ Page {
         Keys.onRightPressed: Engine.on_right()
 
         function get_DB() {
-            return LocalStorage.openDatabaseSync("QQmlHatPursuitDb",
-                                                 "1.0", "The HatPursuit QML SQL!", 1000, config)
-        }
-
-        function config(db) {
-            db.transaction(
-                        function (tx) {
-                            tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score TEXT)');
-                            tx.executeSql('INSERT INTO Score VALUES("0")');
-
-                            tx.executeSql('CREATE TABLE IF NOT EXISTS Hats(hat TEXT, datetime STRING)');
-                        }
-                        );
-            db.changeVersion("", "1.0");
+            return new DB.HatPursuitDB();
         }
 
         function mode_menu() {
@@ -74,26 +62,11 @@ Page {
             z: screen.layer_ui
 
             function getHighScore() {
-                var db = screen.get_DB(), highScore;
-
-                db.transaction(
-                            function (tx) {
-                                var rs = tx.executeSql('SELECT * FROM Score');
-                                highScore = rs.rows.item(0).score;
-                            }
-                            );
-                return parseInt(highScore);
+                return screen.get_DB().get_high_score();
             }
 
             function addScore(score) {
-                var db = parent.get_DB();
-
-                db.transaction(
-                            function (tx) {
-                                tx.executeSql('UPDATE Score SET score = ?', [ score.toString() ]);
-                            }
-                            );
-
+                screen.get_DB().add_score(score);
                 highScore.bestScore = score
             }
         }

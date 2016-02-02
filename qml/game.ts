@@ -1,3 +1,6 @@
+/// <reference path="qmlstuff.d.ts" />
+/// <reference path="HatPursuitDB.ts" />
+
 var cars = []
 var stripes = []
 var carComponent = Qt.createComponent("Car.qml")
@@ -13,7 +16,7 @@ var bike_turn_velocity = 6
 var hat_autopickup = true
 var debug = false
 
-function log(msg) {
+function log(msg: string) {
     if (debug) console.log(msg)
 }
 
@@ -43,63 +46,6 @@ var all_colors = [
     "thistle", "tomato", "turquoise", "violet", "wheat",
     "yellow", "yellowgreen"
 ]
-
-/////////////////////
-/// DATABASE SHIT ///
-/////////////////////
-
-function getFormattedDate() {
-    var date = new Date();
-    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-}
-
-function get_latest_hat() {
-    var db = screen.get_DB(), hat = null
-
-    db.transaction(
-        function (tx) {
-            var rs = tx.executeSql('SELECT * FROM Hats ORDER BY datetime DESC LIMIT 1')
-            if (rs.rows.item(0)) {
-                hat = rs.rows.item(0).hat.split(",")
-            }
-        }
-    );
-
-    return { name: hat[0], primaryColor: hat[1], secondaryColor: hat[2] }
-}
-
-function hat_exists(hat) {
-    var db = screen.get_DB(), exists = false
-
-    db.transaction(
-        function (tx) {
-            var rs = tx.executeSql('SELECT * FROM Hats WHERE hat = ?', [ hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor ])
-
-            if (rs.rows.item(0)) {
-                exists = true
-            }
-        }
-    );
-
-    return exists;
-}
-
-function store_hat(hat) {
-    var db = screen.get_DB()
-
-    db.transaction(
-        function (tx) {
-            tx.executeSql('INSERT INTO Hats VALUES (?, ?)', [
-                hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor,
-                getFormattedDate()
-            ]);
-        }
-    );
-}
-
-////////////////////////////
-/// END OF DATABASE SHIT ///
-////////////////////////////
 
 var chosen_hat = null
 var bike = null
@@ -327,7 +273,7 @@ function update() {
         bike = init_bike()
         var hat = chosen_hat
         if (hat === null) {
-            hat = get_latest_hat()
+            hat = screen.get_DB().get_latest_hat()
         }
 
         bike.attach_hat(create_hat_component(hat, bike))
@@ -356,8 +302,8 @@ function update() {
     }
 
     if (hatDrop && collides(bike, hatDrop)) {
-        if (!hat_exists(hatDrop)) {
-            store_hat(hatDrop)
+        if (!screen.get_DB().hat_exists(hatDrop)) {
+            screen.get_DB().store_hat(hatDrop)
         }
         if (hat_autopickup) {
             var clone = hats[hatDrop.name].createObject(bike, {
