@@ -206,6 +206,10 @@ Page {
                     while (comp.status != Component.Ready) { } // yeah, a busyloop. Fite me irl
                     var obj = comp.createObject(page, { engine: Engine })
                     screen.enabled = false
+                    obj.closed.connect(function() {
+                        obj.destroy()
+                        screen.enabled = true
+                    })
                 }
             }
         }
