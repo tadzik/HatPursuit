@@ -104,7 +104,7 @@ function generate_hat() {
     })
 }
 
-function create_hat_component(hat, parent) {
+function create_hat_component(hat: Hat, parent) {
     return hats[hat.name].createObject(parent, {
         primaryColor: hat.primaryColor,
         secondaryColor: hat.secondaryColor,
@@ -112,7 +112,7 @@ function create_hat_component(hat, parent) {
     })
 }
 
-function select_hat(hat) {
+function select_hat(hat: Hat) {
     chosen_hat = hat
 }
 

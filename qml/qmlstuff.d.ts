@@ -55,6 +55,12 @@ declare interface Game_Score extends Component {
     addScore(score: string);
 }
 
+declare interface Hat {
+    name:           string;
+    primaryColor:   string;
+    secondaryColor: string;
+}
+
 declare var screen:      Screen;
 declare var score:       Game_Score;
 declare var leftBorder:  Component;

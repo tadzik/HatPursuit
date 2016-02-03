@@ -1,8 +1,7 @@
 import QtQuick 2.0
 import QtQuick.LocalStorage 2.0
 import Sailfish.Silica 1.0
-import "game.js" as Engine
-import "HatPursuitDB.js" as DB
+import "all.js" as Engine
 
 Page {
     id: page
@@ -25,7 +24,7 @@ Page {
         Keys.onRightPressed: Engine.on_right()
 
         function get_DB() {
-            return new DB.HatPursuitDB();
+            return new Engine.HatPursuitDB();
         }
 
         function mode_menu() {
@@ -161,7 +160,11 @@ Page {
                     pageStack.push(Qt.resolvedUrl("pages/LoadoutPage.qml"), { engine: Engine, db: screen.get_DB() })
                 } else {
                     var comp = Qt.createComponent("pages/LoadoutPage.qml")
-                    while (comp.status != Component.Ready) { } // yeah, a busyloop. Fite me irl
+                    while (comp.status == Component.Loading) { } // yeah, a busyloop. Fite me irl
+                    if (comp.status == Component.Error) {
+                        console.log("Error loading loadout page: " + comp.errorString());
+                        return;
+                    }
                     var obj = comp.createObject(page, { engine: Engine, db: screen.get_DB() })
                     screen.enabled = false
                     obj.closed.connect(function() {
@@ -183,7 +186,11 @@ Page {
                     pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"), { engine: Engine })
                 } else {
                     var comp = Qt.createComponent("pages/SettingsPage.qml")
-                    while (comp.status != Component.Ready) { } // yeah, a busyloop. Fite me irl
+                    while (comp.status == Component.Loading) { } // yeah, a busyloop. Fite me irl
+                    if (comp.status == Component.Error) {
+                        console.log("Error loading settings page: " + comp.errorString());
+                        return;
+                    }
                     var obj = comp.createObject(page, { engine: Engine })
                     screen.enabled = false
                     obj.closed.connect(function() {

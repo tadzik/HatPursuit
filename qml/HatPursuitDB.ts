@@ -22,6 +22,15 @@ class HatPursuitDB {
         db.changeVersion("", "1.0");
     }
 
+    deserialize_hat(hat: string) : Hat {
+        var fields = hat.split(",");
+        return { name: fields[0], primaryColor: fields[1], secondaryColor: fields[2] };
+    }
+
+    serialize_hat(hat: Hat) : string {
+        return hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor
+    }
+
     getFormattedDate() : string {
         var date = new Date();
         return date.getFullYear() + "-" + (date.getMonth() + 1)
@@ -31,32 +40,32 @@ class HatPursuitDB {
                                   + ":" + date.getSeconds();
     }
     
-    get_latest_hat() : any {
+    get_latest_hat() : Hat {
         var hat = null
     
         this.dbh.transaction((tx) => {
             var rs = tx.executeSql('SELECT * FROM Hats ORDER BY datetime DESC LIMIT 1')
             if (rs.rows.item(0)) {
-                hat = rs.rows.item(0).hat.split(",")
+                hat = this.deserialize_hat(rs.rows.item(0).hat);
             }
         });
     
-        return { name: hat[0], primaryColor: hat[1], secondaryColor: hat[2] }
+        return hat;
     }
 
-    get_all_hats() : any[] {
+    get_all_hats() : Hat[] {
         var ret = [];
         this.dbh.transaction((tx) => {
             var rs = tx.executeSql('SELECT * FROM Hats ORDER BY datetime DESC')
             for (var i = 0; i < rs.rows.length; i++) {
-                var hat = rs.rows.item(i).hat.split(",");
-                ret.push({ name: hat[0], primaryColor: hat[1], secondaryColor: hat[2] })
+                var hat = this.deserialize_hat(rs.rows.item(i).hat);
+                ret.push(hat);
             }
         });
         return ret;
     }
     
-    hat_exists(hat: any) : boolean {
+    hat_exists(hat: Hat) : boolean {
         var exists = false
     
         this.dbh.transaction((tx) => {
@@ -70,12 +79,9 @@ class HatPursuitDB {
         return exists;
     }
     
-    store_hat(hat: any) {
+    store_hat(hat: Hat) {
         this.dbh.transaction((tx) => {
-            tx.executeSql('INSERT INTO Hats VALUES (?, ?)', [
-                hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor,
-                this.getFormattedDate()
-            ]);
+            tx.executeSql('INSERT INTO Hats VALUES (?, ?)', [ this.serialize_hat(hat), this.getFormattedDate() ]);
         });
     }
 
