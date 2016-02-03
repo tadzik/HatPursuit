@@ -19,16 +19,10 @@ Page {
             id: model
 
             Component.onCompleted: {
-                db.transaction(
-                    function (tx) {
-                        var rs = tx.executeSql('SELECT * FROM Hats ORDER BY datetime DESC')
-                        for(var i = 0; i < rs.rows.length; i++) {
-                            var hat = rs.rows.item(i).hat.split(",");
-                            model.append({ name: hat[0], primaryColor: hat[1], secondaryColor: hat[2] })
-                        }
-                    }
-                );
-
+                var hats = db.get_all_hats();
+                for (var i = 0; i < hats.length; i++) {
+                    model.append(hats[i])
+                }
             }
         }
 

@@ -13,7 +13,7 @@ class HatPursuitDB {
     }
 
     dbconfig(db: Database) {
-        db.transaction(function (tx) {
+        db.transaction((tx) => {
             tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score TEXT)');
             tx.executeSql('INSERT INTO Score VALUES("0")');
 
@@ -34,7 +34,7 @@ class HatPursuitDB {
     get_latest_hat() : any {
         var hat = null
     
-        this.dbh.transaction(function (tx) {
+        this.dbh.transaction((tx) => {
             var rs = tx.executeSql('SELECT * FROM Hats ORDER BY datetime DESC LIMIT 1')
             if (rs.rows.item(0)) {
                 hat = rs.rows.item(0).hat.split(",")
@@ -43,11 +43,23 @@ class HatPursuitDB {
     
         return { name: hat[0], primaryColor: hat[1], secondaryColor: hat[2] }
     }
+
+    get_all_hats() : any[] {
+        var ret = [];
+        this.dbh.transaction((tx) => {
+            var rs = tx.executeSql('SELECT * FROM Hats ORDER BY datetime DESC')
+            for (var i = 0; i < rs.rows.length; i++) {
+                var hat = rs.rows.item(i).hat.split(",");
+                ret.push({ name: hat[0], primaryColor: hat[1], secondaryColor: hat[2] })
+            }
+        });
+        return ret;
+    }
     
     hat_exists(hat: any) : boolean {
         var exists = false
     
-        this.dbh.transaction(function (tx) {
+        this.dbh.transaction((tx) => {
             var rs = tx.executeSql('SELECT * FROM Hats WHERE hat = ?', [ hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor ])
 
             if (rs.rows.item(0)) {
@@ -59,7 +71,7 @@ class HatPursuitDB {
     }
     
     store_hat(hat: any) {
-        this.dbh.transaction(function (tx) {
+        this.dbh.transaction((tx) => {
             tx.executeSql('INSERT INTO Hats VALUES (?, ?)', [
                 hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor,
                 this.getFormattedDate()
@@ -70,7 +82,7 @@ class HatPursuitDB {
     get_high_score() : number {
         var highScore;
 
-        this.dbh.transaction(function (tx) {
+        this.dbh.transaction((tx) => {
             var rs = tx.executeSql('SELECT * FROM Score');
             highScore = rs.rows.item(0).score;
         });
@@ -78,7 +90,7 @@ class HatPursuitDB {
     }
 
     add_score(score: string) {
-        this.dbh.transaction(function (tx) {
+        this.dbh.transaction((tx) => {
             tx.executeSql('UPDATE Score SET score = ?', [ score ]);
         });
     }
