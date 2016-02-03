@@ -38,6 +38,7 @@ Page {
             height: Theme.itemSizeSmall
 
             Row {
+                id: row
                 spacing: Theme.paddingLarge
 
                 Rectangle {
@@ -62,7 +63,7 @@ Page {
             }
 
             MouseArea {
-                anchors.fill: parent
+                anchors.fill: row
                 onClicked: {
                     engine.select_hat({ name: name, primaryColor: primaryColor, secondaryColor: secondaryColor })
                     pageStack.pop()
