@@ -1,8 +1,8 @@
 import QtQuick 2.0
 
 Item {
-    width: 30
-    height: 30
+    height: screen.height * 0.03
+    width: height
 
     property string name: "tophat"
     property string primaryColor: "black"

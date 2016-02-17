@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import QtQuick.LocalStorage 2.0
-import Sailfish.Silica 1.0
+import Fakefish 0.1
 import "all.js" as Engine
 
 Page {
@@ -9,8 +9,8 @@ Page {
 
     Rectangle {
         id: screen
-        width: 540
         height: 960
+        width: height * 0.5625
         color: "gray"
         focus: true
 
@@ -54,12 +54,12 @@ Page {
 
             id: score
             text: Math.floor(distance).toString()
-            font.pixelSize: 25
+            font.pixelSize: screen.height * 0.026
 
             anchors.top: parent.top
             anchors.left: parent.left
-            anchors.topMargin: 10
-            anchors.leftMargin: 25
+            anchors.topMargin: screen.height / 100
+            anchors.leftMargin: screen.height * 0.026
             z: screen.layer_ui
 
             function getHighScore() {
@@ -77,12 +77,12 @@ Page {
 
             id: highScore
             text: "Top score: " + bestScore
-            font.pixelSize: 25
+            font.pixelSize: screen.height * 0.026
 
             anchors.top: parent.top
             anchors.right: parent.right
-            anchors.topMargin: 10
-            anchors.rightMargin: 25
+            anchors.topMargin: screen.height / 100
+            anchors.rightMargin: screen.height * 0.026
             z: screen.layer_ui
 
             Component.onCompleted: {
@@ -92,15 +92,15 @@ Page {
 
         Rectangle {
             id: leftBorder
-            width: 10
-            height: 960
+            width: screen.height / 100
+            height: screen.height
             color: "black"
         }
 
         Rectangle {
             id: rightBorder
-            width: 10
-            height: 960
+            width: screen.height / 100
+            height: screen.height
             color: "black"
 
             Component.onCompleted: { x = screen.width - rightBorder.width }
@@ -134,7 +134,7 @@ Page {
 
         Text {
             id: logo
-            font.pixelSize: 72
+            font.pixelSize: screen.height * 0.075
             font.bold: true
             text: "HatPursuit"
             z: screen.layer_ui

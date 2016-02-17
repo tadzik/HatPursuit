@@ -61,6 +61,7 @@ declare interface Game_Score extends Component {
 declare interface Bike extends Component {
     rotationAngle: number;
     velocity:      number;
+    turnVelocity:  number;
 
     turn_left();
     turn_right();

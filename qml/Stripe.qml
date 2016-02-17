@@ -1,7 +1,7 @@
 import QtQuick 2.0;
 
 Rectangle {
-    width: 10
-    height: 100
+    height: screen.height / 10
+    width: height / 10
     color: "white"
 }

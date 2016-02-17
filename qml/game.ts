@@ -43,7 +43,6 @@ class Engine {
     // configurable stuff
     base_velocity:      number  = 8
     car_spacing:        number  = 2.5
-    bike_turn_velocity: number  = 6
     hat_autopickup:     boolean = true
 
     hats: any = {
@@ -63,6 +62,7 @@ class Engine {
 
     constructor(s: Screen) {
         this.screen = s
+        this.base_velocity = screen.height / 120
     }
 
     mode_menu() {
@@ -143,7 +143,6 @@ class Engine {
         b.x = (this.screen.width - b.width) / 2
         b.z = this.screen.layer_cars
         b.color = "green"
-        b.turnVelocity = this.bike_turn_velocity
         return b
     }
 
@@ -169,7 +168,7 @@ class Engine {
     }
 
     after_crash() {
-        this.bike.x += 4 * this.crash_direction
+        this.bike.x += this.bike.turnVelocity * this.crash_direction
         this.bike.rotationAngle += 4.0
         if (this.bike.rotationAngle % 360 == 0
         || this.bike.x > this.screen.width

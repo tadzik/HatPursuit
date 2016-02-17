@@ -1,13 +1,13 @@
 import QtQuick 2.0
 
 Item {
-    width: 120
-    height: 200
+    height: screen.height * 0.21
+    width: height * 0.6
 
     property int velocity
-    property int wheelWidth: 16
-    property int wheelHeight: 45
-    property int lightRadius: 24
+    property int wheelWidth: width * 0.13
+    property int wheelHeight: height * 0.225
+    property int lightRadius: width * 0.2
     property string color: "red"
 
     Rectangle {
@@ -38,10 +38,10 @@ Item {
         id: topLeftWheel
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 25
+        anchors.topMargin: parent.height / 8
         width: parent.wheelWidth
         height: parent.wheelHeight
-        radius: 25.0
+        radius: parent.height / 8.0
         color: "black"
     }
 
@@ -49,10 +49,10 @@ Item {
         id: topRightWheel
         anchors.top: parent.top
         anchors.right: parent.right
-        anchors.topMargin: 25
+        anchors.topMargin: parent.height / 8
         width: parent.wheelWidth
         height: parent.wheelHeight
-        radius: 25.0
+        radius: parent.height / 8.0
         color: "black"
     }
 
@@ -60,10 +60,10 @@ Item {
         id: bottomLeftWheel
         anchors.bottom: parent.bottom
         anchors.left: parent.left
-        anchors.bottomMargin: 25
+        anchors.bottomMargin: parent.height / 8
         width: parent.wheelWidth
         height: parent.wheelHeight
-        radius: 25.0
+        radius: parent.height / 8.0
         color: "black"
     }
 
@@ -71,10 +71,10 @@ Item {
         id: bottomRightWheel
         anchors.bottom: parent.bottom
         anchors.right: parent.right
-        anchors.bottomMargin: 25
+        anchors.bottomMargin: parent.height / 8
         width: parent.wheelWidth
         height: parent.wheelHeight
-        radius: 25.0
+        radius: parent.height / 8.0
         color: "black"
     }
 
@@ -88,12 +88,11 @@ Item {
         anchors.rightMargin: parent.wheelWidth / 2
         anchors.topMargin: parent.lightRadius / 2
         color: parent.color
-        radius: 15.0
+        radius: parent.width / 8.0
     }
 
     Rectangle {
         id: roof
-        radius: 15.0
         width: body.width
         height: body.height / 2
         anchors.horizontalCenter: body.horizontalCenter
@@ -101,5 +100,6 @@ Item {
         color: body.color
         border.color: "black"
         border.width: 3
+        radius: parent.width / 8.0
     }
 }

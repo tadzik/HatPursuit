@@ -1,8 +1,8 @@
 import QtQuick 2.0
 
 Item {
-    width: 30
-    height: 20
+    height: screen.height * 0.02
+    width: height * 1.5
 
     property string name: "bowler"
     property string primaryColor: "black"

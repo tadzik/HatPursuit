@@ -1,11 +1,11 @@
 import QtQuick 2.0
 
 Item {
-    width: 25
-    height: 100
+    height: screen.height / 10
+    width: height / 4
 
     property int velocity: 0
-    property int turnVelocity: 8
+    property int turnVelocity: width / 4
     property string color: "green"
     property real rotationAngle: 0
     property var hat: null
@@ -41,7 +41,7 @@ Item {
         height: parent.height / 3
         anchors.top: parent.top
         color: "black"
-        radius: 25.0
+        radius: parent.height / 4
     }
 
     Rectangle {
@@ -50,7 +50,7 @@ Item {
         height: parent.height / 3
         anchors.bottom: parent.bottom
         color: "black"
-        radius: 25.0
+        radius: parent.height / 4
     }
 
     Rectangle {
@@ -59,7 +59,7 @@ Item {
         height: parent.height / 2
         anchors.verticalCenter: parent.verticalCenter
         color: parent.color
-        radius: 15.0
+        radius: parent.height * 0.15
     }
 
     Rectangle {
@@ -69,7 +69,7 @@ Item {
         anchors.horizontalCenter: body.horizontalCenter
         anchors.top: body.top
         anchors.topMargin: height / 2
-        radius: 15.0
+        radius: parent.height * 0.15
         color: "green"
     }
 }
