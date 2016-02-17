@@ -45,7 +45,7 @@ Page {
         }
 
         Component.onCompleted: {
-            engine = new Engine.Engine()
+            engine = new Engine.Engine(screen)
             engine.mode_menu()
         }
 

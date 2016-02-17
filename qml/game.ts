@@ -33,7 +33,7 @@ var all_colors = [
 ]
 
 class Engine {
-    //screen: Screen;
+    screen: Screen;
     carComponent:    any = Qt.createComponent("Car.qml")
     bikeComponent:   any = Qt.createComponent("Bike.qml")
     stripeComponent: any = Qt.createComponent("Stripe.qml")
@@ -61,13 +61,13 @@ class Engine {
     crashed:         boolean      = false
     crash_direction: number       = 1
 
-    //constructor(s: Screen) {
-    //    this.screen = s
-    //}
+    constructor(s: Screen) {
+        this.screen = s
+    }
 
     mode_menu() {
         this.running = false
-        screen.mode_menu()
+        this.screen.mode_menu()
     }
 
     mode_game() {
@@ -83,7 +83,7 @@ class Engine {
             this.hatDrop = null
         }
         this.running = true
-        screen.mode_game()
+        this.screen.mode_game()
     }
 
     on_left() {
@@ -105,10 +105,10 @@ class Engine {
         // of course, Javascript doesn't (yet) have obj.values()
         for (var key in this.hats) components.push(this.hats[key])
         var idx = Math.floor(Math.random() * components.length);
-        return components[idx].createObject(screen, {
+        return components[idx].createObject(this.screen, {
             primaryColor:   this.get_hat_color(),
             secondaryColor: this.get_hat_color(),
-            z:              screen.layer_hats,
+            z:              this.screen.layer_hats,
             component:      components[idx],
         })
     }
@@ -117,7 +117,7 @@ class Engine {
         return this.hats[hat.name].createObject(parent, {
             primaryColor: hat.primaryColor,
             secondaryColor: hat.secondaryColor,
-            z: screen.layer_hats,
+            z: this.screen.layer_hats,
         })
     }
 
@@ -126,10 +126,10 @@ class Engine {
     }
 
     new_stripe(x: number, i: number) {
-        var s = this.stripeComponent.createObject(screen, {
+        var s = this.stripeComponent.createObject(this.screen, {
             x: x,
             y: 0,
-            z: screen.layer_stripes });
+            z: this.screen.layer_stripes });
         s.x -= s.width / 2;
         s.y += i * s.height * 1.5;
 
@@ -137,11 +137,11 @@ class Engine {
     }
 
     init_bike() : Bike {
-        var b = this.bikeComponent.createObject(screen)
-        b.anchors.bottom = screen.bottom
+        var b = this.bikeComponent.createObject(this.screen)
+        b.anchors.bottom = this.screen.bottom
         b.anchors.bottomMargin = 50
-        b.x = (screen.width - b.width) / 2
-        b.z = screen.layer_cars
+        b.x = (this.screen.width - b.width) / 2
+        b.z = this.screen.layer_cars
         b.color = "green"
         b.turnVelocity = this.bike_turn_velocity
         return b
@@ -149,9 +149,9 @@ class Engine {
 
     init_stripes() {
         for (var i = 0; i < 8; i++) {
-            this.new_stripe(screen.width / 4, i);
-            this.new_stripe(screen.width - screen.width / 4, i);
-            this.new_stripe(screen.width / 2, i);
+            this.new_stripe(this.screen.width / 4, i);
+            this.new_stripe(this.screen.width - this.screen.width / 4, i);
+            this.new_stripe(this.screen.width / 2, i);
         }
     }
 
@@ -172,7 +172,7 @@ class Engine {
         this.bike.x += 4 * this.crash_direction
         this.bike.rotationAngle += 4.0
         if (this.bike.rotationAngle % 360 == 0
-        || this.bike.x > screen.width
+        || this.bike.x > this.screen.width
         || this.bike.x + this.bike.width < 0) {
             if (score.distance > score.getHighScore()) {
                 score.addScore(score.text);
@@ -202,7 +202,7 @@ class Engine {
         var roomForMore = true
         for (var car of this.cars) {
             car.y += car.velocity
-            if (car.y <= screen.height) {
+            if (car.y <= this.screen.height) {
                 newcars.push(car)
                 if (car.y < 0) {
                     roomForMore = false
@@ -214,14 +214,14 @@ class Engine {
         this.cars = newcars
 
         if (roomForMore) {
-            var c = this.carComponent.createObject(screen, {
+            var c = this.carComponent.createObject(this.screen, {
                 x:     200,
                 y:     0,
-                z:     screen.layer_cars,
+                z:     this.screen.layer_cars,
                 color: this.get_car_color()
             });
             c.y -= c.height * this.car_spacing // space between cars
-            c.x = Math.random() * (screen.width - c.width)
+            c.x = Math.random() * (this.screen.width - c.width)
             c.velocity = this.base_velocity
             if (c === null) {
                 console.log("ERROR: " + this.carComponent.errorString())
@@ -231,7 +231,7 @@ class Engine {
 
             if (this.should_hat_drop()) {
                 this.hatDrop = this.generate_hat()
-                if ((c.x + c.width/2) < screen.width/2) {
+                if ((c.x + c.width/2) < this.screen.width/2) {
                     this.hatDrop.x = c.x + 2 * c.width
                 } else {
                     this.hatDrop.x = c.x - c.width
@@ -249,7 +249,7 @@ class Engine {
 
         for (var stripe of this.stripes) {
             stripe.y += this.base_velocity
-            if (stripe.y > screen.height) {
+            if (stripe.y > this.screen.height) {
                 stripe.y -= stripe.height * 0.5 * this.stripes.length
             }
         }
@@ -258,7 +258,7 @@ class Engine {
     update_hats() {
         if (this.hatDrop) {
             this.hatDrop.y += this.base_velocity
-            if (this.hatDrop.y > screen.height) {
+            if (this.hatDrop.y > this.screen.height) {
                 this.hatDrop.destroy()
                 this.hatDrop = null
             }
@@ -280,7 +280,7 @@ class Engine {
             this.bike = this.init_bike()
             var hat = this.chosen_hat
             if (hat === null) {
-                hat = screen.get_DB().get_latest_hat()
+                hat = this.screen.get_DB().get_latest_hat()
             }
 
             this.bike.attach_hat(this.create_hat_component(hat, this.bike))
@@ -309,8 +309,8 @@ class Engine {
         }
 
         if (this.hatDrop && this.collides(this.bike, this.hatDrop)) {
-            if (!screen.get_DB().hat_exists(this.hatDrop)) {
-                screen.get_DB().store_hat(this.hatDrop)
+            if (!this.screen.get_DB().hat_exists(this.hatDrop)) {
+                this.screen.get_DB().store_hat(this.hatDrop)
             }
             if (this.hat_autopickup) {
                 var clone = this.hats[this.hatDrop.name].createObject(this.bike, {
