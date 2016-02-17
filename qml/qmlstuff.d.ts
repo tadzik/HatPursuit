@@ -16,6 +16,9 @@ declare interface Component {
     // position
     x:      number;
     y:      number;
+
+    // methods
+    destroy();
 }
 
 declare module LocalStorage {
@@ -55,10 +58,26 @@ declare interface Game_Score extends Component {
     addScore(score: string);
 }
 
+declare interface Bike extends Component {
+    rotationAngle: number;
+    velocity:      number;
+
+    turn_left();
+    turn_right();
+    attach_hat(hat: Component);
+}
+
+declare interface Car extends Component {
+    velocity: number;
+}
+
 declare interface Hat {
     name:           string;
     primaryColor:   string;
     secondaryColor: string;
+}
+
+declare interface HatComponent extends Hat, Component {
 }
 
 declare var screen:      Screen;

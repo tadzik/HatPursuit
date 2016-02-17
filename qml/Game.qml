@@ -19,9 +19,10 @@ Page {
         property int layer_cars:    300
         property int layer_hats:    400
         property int layer_ui:      500
+        property var engine
 
-        Keys.onLeftPressed:  Engine.on_left()
-        Keys.onRightPressed: Engine.on_right()
+        Keys.onLeftPressed:  engine.on_left()
+        Keys.onRightPressed: engine.on_right()
 
         function get_DB() {
             return new Engine.HatPursuitDB();
@@ -44,7 +45,8 @@ Page {
         }
 
         Component.onCompleted: {
-            Engine.mode_menu()
+            engine = new Engine.Engine()
+            engine.mode_menu()
         }
 
         Text {
@@ -113,7 +115,7 @@ Page {
             opacity: 0
             MouseArea {
                 anchors.fill: parent
-                onClicked: Engine.on_left()
+                onClicked: screen.engine.on_left()
             }
         }
 
@@ -126,7 +128,7 @@ Page {
             opacity: 0
             MouseArea {
                 anchors.fill: parent
-                onClicked: Engine.on_right()
+                onClicked: screen.engine.on_right()
             }
         }
 
@@ -146,7 +148,7 @@ Page {
             z: screen.layer_ui
             anchors.top: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
-            cb: function () { Engine.mode_game() }
+            cb: function () { screen.engine.mode_game() }
         }
 
         MainMenuButton {
@@ -157,7 +159,8 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             cb: function() {
                 if (page.status !== null) {
-                    pageStack.push(Qt.resolvedUrl("pages/LoadoutPage.qml"), { engine: Engine, db: screen.get_DB() })
+                    pageStack.push(Qt.resolvedUrl("pages/LoadoutPage.qml"),
+                        { engine: screen.engine, db: screen.get_DB() })
                 } else {
                     var comp = Qt.createComponent("pages/LoadoutPage.qml")
                     while (comp.status == Component.Loading) { } // yeah, a busyloop. Fite me irl
@@ -165,7 +168,7 @@ Page {
                         console.log("Error loading loadout page: " + comp.errorString());
                         return;
                     }
-                    var obj = comp.createObject(page, { engine: Engine, db: screen.get_DB() })
+                    var obj = comp.createObject(page, { engine: screen.engine, db: screen.get_DB() })
                     screen.enabled = false
                     obj.closed.connect(function() {
                         obj.destroy()
@@ -183,7 +186,7 @@ Page {
             anchors.horizontalCenter: parent.horizontalCenter
             cb: function() {
                 if (page.status !== null) {
-                    pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"), { engine: Engine })
+                    pageStack.push(Qt.resolvedUrl("pages/SettingsPage.qml"), { engine: screen.engine })
                 } else {
                     var comp = Qt.createComponent("pages/SettingsPage.qml")
                     while (comp.status == Component.Loading) { } // yeah, a busyloop. Fite me irl
@@ -191,7 +194,7 @@ Page {
                         console.log("Error loading settings page: " + comp.errorString());
                         return;
                     }
-                    var obj = comp.createObject(page, { engine: Engine })
+                    var obj = comp.createObject(page, { engine: screen.engine })
                     screen.enabled = false
                     obj.closed.connect(function() {
                         obj.destroy()
@@ -206,7 +209,7 @@ Page {
             interval: 16
             repeat: true
             running: true
-            onTriggered: Engine.update()
+            onTriggered: screen.engine.update()
         }
     }
 }
