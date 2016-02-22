@@ -61,29 +61,47 @@ class Engine {
     running:         boolean      = true
     crashed:         boolean      = false
     crash_direction: number       = 1
+    disable_cars:    boolean      = false
 
     constructor(s: Screen) {
         this.screen = s
         this.db = s.get_DB()
     }
 
+    clear_cars() {
+        for (var car of this.cars) {
+            car.destroy()
+        }
+        this.cars = []
+    }
+
+    clear_hats() {
+        if (this.hatDrop) {
+            this.hatDrop.destroy()
+            this.hatDrop = null
+        }
+    }
+
     mode_menu() {
         this.running = false
+        this.disable_cars = false
         this.screen.mode_menu()
+    }
+
+    // like menu, but without cars
+    mode_highscore() {
+        this.clear_cars()
+        this.clear_hats()
+        this.disable_cars = true
+        this.screen.mode_highscore()
     }
 
     mode_game() {
         this.crashed = false
         this.bike = null
         score.distance = 0
-        for (var car of this.cars) {
-            car.destroy()
-        }
-        this.cars = []
-        if (this.hatDrop) {
-            this.hatDrop.destroy()
-            this.hatDrop = null
-        }
+        this.clear_cars()
+        this.clear_hats()
         this.running = true
         this.screen.mode_game()
     }
@@ -202,6 +220,7 @@ class Engine {
     }
 
     update_cars() {
+        if (this.disable_cars) return
         var newcars = []
         var roomForMore = true
         for (var car of this.cars) {

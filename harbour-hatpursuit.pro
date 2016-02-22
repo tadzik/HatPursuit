@@ -43,10 +43,11 @@ DISTFILES += \
     qml/Car.qml \
     qml/Game.qml \
     qml/Stripe.qml \
-    qml/game.js \
+    qml/all.js \
     qml/hats/Bowler.qml \
     qml/hats/TopHat.qml \
     qml/pages/SettingsPage.qml \
     qml/pages/LoadoutPage.qml \
-    qml/MainMenuButton.qml
+    qml/MainMenuButton.qml \
+    qml/HighScoresOverlay.qml
 

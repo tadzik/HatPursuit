@@ -43,6 +43,7 @@ declare interface Screen extends Component {
     get_DB(): HatPursuitDB;
     mode_menu();
     mode_game();
+    mode_highscore();
 
     // qml stuff
     bottom: any;

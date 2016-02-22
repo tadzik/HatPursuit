@@ -88,6 +88,18 @@ class HatPursuitDB {
         return highScore;
     }
 
+    get_high_scores(limit: number) : any[] {
+        var ret = []
+        this.dbh.transaction((tx) => {
+            var rs = tx.executeSql('SELECT score,datetime(datetime,"unixepoch","localtime") as dt '
+                                   + 'FROM Score ORDER BY datetime DESC LIMIT ?', [ limit ]);
+            for (var i = 0; i < rs.rows.length; i++) {
+                ret.push([rs.rows.item(i).score.toString(), rs.rows.item(i).dt.toString()])
+            }
+        });
+        return ret
+    }
+
     add_score(score: number) {
         if (score > this.get_high_score()) {
             this.dbh.transaction((tx) => {

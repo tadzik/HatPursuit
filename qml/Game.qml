@@ -30,18 +30,28 @@ Page {
 
         function mode_menu() {
             score.visible = false
+            highScore.visible = true
             logo.visible = true
             startButton.visible = true
             loadoutButton.visible = true
+            highScoresButton.visible = true
             settingsButton.visible = true
         }
 
         function mode_game() {
             score.visible = true
+            highScore.visible = true
             logo.visible = false
             startButton.visible = false
             loadoutButton.visible = false
+            highScoresButton.visible = false
             settingsButton.visible = false
+        }
+
+        function mode_highscore() {
+            mode_game()
+            score.visible = false
+            highScore.visible = false
         }
 
         Component.onCompleted: {
@@ -170,10 +180,33 @@ Page {
         }
 
         MainMenuButton {
+            id: highScoresButton
+            label: "High Scores"
+            z: screen.layer_ui
+            anchors.top: loadoutButton.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            cb: function() {
+                screen.engine.mode_highscore()
+                var comp = Qt.createComponent("HighScoresOverlay.qml")
+                while (comp.status == Component.Loading) { } // yeah, a busyloop. Fite me irl
+                if (comp.status == Component.Error) {
+                    console.log("Error loading high scores: " + comp.errorString());
+                    return;
+                }
+                var obj = comp.createObject(screen, { db: screen.get_DB() })
+                obj.z = screen.layer_ui
+                obj.closed.connect(function() {
+                    obj.destroy()
+                    screen.engine.mode_menu()
+                })
+            }
+        }
+
+        MainMenuButton {
             id: settingsButton
             label: "Settings"
             z: screen.layer_ui
-            anchors.top: loadoutButton.bottom
+            anchors.top: highScoresButton.bottom
             anchors.horizontalCenter: parent.horizontalCenter
             cb: function() {
                 if (page.status !== null) {
