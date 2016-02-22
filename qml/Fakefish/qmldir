@@ -5,4 +5,5 @@ PageHeader 0.1 PageHeader.qml
 SilicaFlickable 0.1 SilicaFlickable.qml
 SilicaListView 0.1 SilicaListView.qml
 Slider 0.1 Slider.qml
+TextSwitch 0.1 TextSwitch.qml
 singleton Theme 0.1 Theme.qml

@@ -16,7 +16,17 @@ Page {
                 title: "Settings"
             }
 
+            TextSwitch {
+                text: "Hat autopickup"
+                checked: page.engine.hat_autopickup
+
+                onCheckedChanged: {
+                    page.engine.hat_autopickup = checked;
+                }
+            }
+
             Slider {
+                visible: false
                 label: "Car spacing"
                 width: parent.width
                 minimumValue: 1
@@ -29,6 +39,7 @@ Page {
                 }
             }
             Slider {
+                visible: false
                 label: "Car speed"
                 width: parent.width
                 minimumValue: 1
@@ -41,6 +52,7 @@ Page {
                 }
             }
             Slider {
+                visible: false
                 label: "Bike turn speed"
                 width: parent.width
                 minimumValue: 1
