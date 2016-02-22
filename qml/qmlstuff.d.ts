@@ -49,13 +49,13 @@ declare interface Screen extends Component {
 }
 
 declare interface Game_Score extends Component {
-    //properties
     distance: number;
     text:     string;
+}
 
-    // methods
-    getHighScore(): number;
-    addScore(score: string);
+declare interface Game_High_Score extends Component {
+    bestScore: string;
+    text:      string;
 }
 
 declare interface Bike extends Component {
@@ -82,5 +82,6 @@ declare interface HatComponent extends Hat, Component {
 
 declare var screen:      Screen;
 declare var score:       Game_Score;
+declare var highScore:   Game_High_Score;
 declare var leftBorder:  Component;
 declare var rightBorder: Component;

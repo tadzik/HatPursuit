@@ -34,6 +34,7 @@ var all_colors = [
 
 class Engine {
     screen: Screen;
+    db: HatPursuitDB;
     carComponent:    any = Qt.createComponent("Car.qml")
     bikeComponent:   any = Qt.createComponent("Bike.qml")
     stripeComponent: any = Qt.createComponent("Stripe.qml")
@@ -63,6 +64,7 @@ class Engine {
 
     constructor(s: Screen) {
         this.screen = s
+        this.db = s.get_DB()
     }
 
     mode_menu() {
@@ -174,8 +176,10 @@ class Engine {
         if (this.bike.rotationAngle % 360 == 0
         || this.bike.x > this.screen.width
         || this.bike.x + this.bike.width < 0) {
-            if (score.distance > score.getHighScore()) {
-                score.addScore(score.text);
+            var points = Math.floor(score.distance)
+            if (points > parseInt(highScore.bestScore)) {
+                this.db.add_score(points);
+                highScore.bestScore = points.toString();
             }
             this.bike.destroy()
             this.mode_menu()
@@ -280,10 +284,12 @@ class Engine {
             this.bike = this.init_bike()
             var hat = this.chosen_hat
             if (hat === null) {
-                hat = this.screen.get_DB().get_latest_hat()
+                hat = this.db.get_latest_hat()
             }
 
-            this.bike.attach_hat(this.create_hat_component(hat, this.bike))
+            if (hat) {
+                this.bike.attach_hat(this.create_hat_component(hat, this.bike))
+            }
         }
 
 
@@ -309,8 +315,8 @@ class Engine {
         }
 
         if (this.hatDrop && this.collides(this.bike, this.hatDrop)) {
-            if (!this.screen.get_DB().hat_exists(this.hatDrop)) {
-                this.screen.get_DB().store_hat(this.hatDrop)
+            if (!this.db.hat_exists(this.hatDrop)) {
+                this.db.store_hat(this.hatDrop)
             }
             if (this.hat_autopickup) {
                 var clone = this.hats[this.hatDrop.name].createObject(this.bike, {

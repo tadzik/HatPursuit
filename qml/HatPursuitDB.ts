@@ -14,10 +14,8 @@ class HatPursuitDB {
 
     dbconfig(db: Database) {
         db.transaction((tx) => {
-            tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score TEXT)');
-            tx.executeSql('INSERT INTO Score VALUES("0")');
-
-            tx.executeSql('CREATE TABLE IF NOT EXISTS Hats(hat TEXT, datetime STRING)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score INTEGER, datetime INTEGER)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS Hats(hat TEXT, datetime INTEGER)');
         });
         db.changeVersion("", "1.0");
     }
@@ -31,15 +29,6 @@ class HatPursuitDB {
         return hat.name + ',' + hat.primaryColor + ',' + hat.secondaryColor
     }
 
-    getFormattedDate() : string {
-        var date = new Date();
-        return date.getFullYear() + "-" + (date.getMonth() + 1)
-                                  + "-" + date.getDate()
-                                  + " " +  date.getHours()
-                                  + ":" + date.getMinutes()
-                                  + ":" + date.getSeconds();
-    }
-    
     get_latest_hat() : Hat {
         var hat = null
     
@@ -81,7 +70,8 @@ class HatPursuitDB {
     
     store_hat(hat: Hat) {
         this.dbh.transaction((tx) => {
-            tx.executeSql('INSERT INTO Hats VALUES (?, ?)', [ this.serialize_hat(hat), this.getFormattedDate() ]);
+            tx.executeSql('INSERT INTO Hats VALUES (?, strftime("%s", "now"))',
+                          [ this.serialize_hat(hat) ]);
         });
     }
 
@@ -89,15 +79,20 @@ class HatPursuitDB {
         var highScore;
 
         this.dbh.transaction((tx) => {
-            var rs = tx.executeSql('SELECT * FROM Score');
+            var rs = tx.executeSql('SELECT MAX(score) FROM Score');
             highScore = rs.rows.item(0).score;
+            if (!highScore) {
+                highScore = 0;
+            }
         });
-        return parseInt(highScore);
+        return highScore;
     }
 
-    add_score(score: string) {
-        this.dbh.transaction((tx) => {
-            tx.executeSql('UPDATE Score SET score = ?', [ score ]);
-        });
+    add_score(score: number) {
+        if (score > this.get_high_score()) {
+            this.dbh.transaction((tx) => {
+                tx.executeSql('INSERT INTO Score VALUES (?, strftime("%s", "now"))', [ score ]);
+            });
+        }
     }
 }

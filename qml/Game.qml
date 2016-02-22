@@ -61,15 +61,6 @@ Page {
             anchors.topMargin: 10
             anchors.leftMargin: 25
             z: screen.layer_ui
-
-            function getHighScore() {
-                return screen.get_DB().get_high_score();
-            }
-
-            function addScore(score) {
-                screen.get_DB().add_score(score);
-                highScore.bestScore = score
-            }
         }
 
         Text {
@@ -86,7 +77,7 @@ Page {
             z: screen.layer_ui
 
             Component.onCompleted: {
-                bestScore = score.getHighScore();
+                bestScore = screen.get_DB().get_high_score();
             }
         }
 
