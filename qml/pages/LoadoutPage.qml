@@ -20,6 +20,9 @@ Page {
 
             Component.onCompleted: {
                 var hats = db.get_all_hats();
+                var latest = db.get_latest_hat();
+                latest.phony = true;
+                model.append(latest)
                 for (var i = 0; i < hats.length; i++) {
                     model.append(hats[i])
                 }
@@ -52,14 +55,22 @@ Page {
 
                 Label {
                     anchors.verticalCenter: parent.verticalCenter
-                    text: page.capitalize(primaryColor) + "-" + page.capitalize(secondaryColor) + " " + page.capitalize(name)
+                    text: phony ? "Wear the latest hat"
+                                : page.capitalize(primaryColor) + "-"
+                                  + page.capitalize(secondaryColor) + " "
+                                  + page.capitalize(name)
                 }
             }
 
             MouseArea {
                 anchors.fill: row
                 onClicked: {
-                    engine.select_hat({ name: name, primaryColor: primaryColor, secondaryColor: secondaryColor })
+                    if (phony) {
+                        engine.select_hat(null)
+                    } else {
+                        engine.select_hat({ name: name, primaryColor: primaryColor,
+                                            secondaryColor: secondaryColor })
+                    }
                     pageStack.pop()
                 }
             }
