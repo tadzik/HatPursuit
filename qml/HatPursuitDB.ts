@@ -81,7 +81,7 @@ class HatPursuitDB {
         var highScore;
 
         this.dbh.transaction((tx) => {
-            var rs = tx.executeSql('SELECT MAX(score) FROM Score');
+            var rs = tx.executeSql('SELECT MAX(score) AS score FROM Score');
             highScore = rs.rows.item(0).score;
             if (!highScore) {
                 highScore = 0;
@@ -94,7 +94,7 @@ class HatPursuitDB {
         var ret = []
         this.dbh.transaction((tx) => {
             var rs = tx.executeSql('SELECT score,datetime(datetime,"unixepoch","localtime") as dt '
-                                   + 'FROM Score ORDER BY datetime DESC LIMIT ?', [ limit ]);
+                                   + 'FROM Score ORDER BY score DESC LIMIT ?', [ limit ]);
             for (var i = 0; i < rs.rows.length; i++) {
                 ret.push([rs.rows.item(i).score.toString(), rs.rows.item(i).dt.toString()])
             }
