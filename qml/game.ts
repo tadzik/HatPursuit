@@ -45,7 +45,7 @@ class Engine {
     base_velocity:      number  = 8
     car_spacing:        number  = 2.5
     bike_turn_velocity: number  = 6
-    hat_autopickup:     boolean = true
+    hat_autopickup:     boolean;
 
     hats: any = {
         "bowler": this.bowlerComponent,
@@ -66,6 +66,15 @@ class Engine {
     constructor(s: Screen) {
         this.screen = s
         this.db = s.get_DB()
+        this.read_settings()
+    }
+
+    write_settings() {
+        this.db.set_setting("hat_autopickup", this.hat_autopickup ? "true" : "")
+    }
+
+    read_settings() {
+        this.hat_autopickup = this.db.get_setting("hat_autopickup") === "true"
     }
 
     clear_cars() {

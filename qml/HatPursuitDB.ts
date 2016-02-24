@@ -16,6 +16,8 @@ class HatPursuitDB {
         db.transaction((tx) => {
             tx.executeSql('CREATE TABLE IF NOT EXISTS Score(score INTEGER, datetime INTEGER)');
             tx.executeSql('CREATE TABLE IF NOT EXISTS Hats(hat TEXT, datetime INTEGER)');
+            tx.executeSql('CREATE TABLE IF NOT EXISTS Settings(key TEXT, value TEXT)');
+            tx.executeSql('INSERT INTO Settings VALUES (?, ?)', [ "hat_autopickup", "true" ]);
         });
         db.changeVersion("", "1.0");
     }
@@ -98,6 +100,21 @@ class HatPursuitDB {
             }
         });
         return ret
+    }
+
+    set_setting(key: string, value: string) {
+        this.dbh.transaction((tx) => {
+            tx.executeSql('UPDATE Settings SET value = ? WHERE key = ?', [ value, key ]);
+        });
+    }
+
+    get_setting(key: string) : string {
+        var ret;
+        this.dbh.transaction((tx) => {
+            var rs = tx.executeSql('SELECT value FROM Settings WHERE key = ?', [ key ]);
+            ret = rs.rows.item(0).value;
+        });
+        return ret;
     }
 
     add_score(score: number) {
