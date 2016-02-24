@@ -17,6 +17,8 @@ declare interface Component {
     x:      number;
     y:      number;
 
+    visible: boolean;
+
     // methods
     destroy();
 }
@@ -44,6 +46,8 @@ declare interface Screen extends Component {
     mode_menu();
     mode_game();
     mode_highscore();
+    mode_gameover(hats: boolean);
+    get_hat_container() : Component;
 
     // qml stuff
     bottom: any;

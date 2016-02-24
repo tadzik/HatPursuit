@@ -53,15 +53,17 @@ class Engine {
     }
 
     // game state stuff
-    bike:            Bike         = null
-    chosen_hat:      Hat          = null
-    hatDrop:         HatComponent = null
-    cars:            Car[]        = []
-    stripes:         Component[]  = []
-    running:         boolean      = true
-    crashed:         boolean      = false
-    crash_direction: number       = 1
-    disable_cars:    boolean      = false
+    bike:            Bike           = null
+    chosen_hat:      Hat            = null
+    hatDrop:         HatComponent   = null
+    cars:            Car[]          = []
+    stripes:         Component[]    = []
+    running:         boolean        = true
+    crashed:         boolean        = false
+    crash_direction: number         = 1
+    disable_cars:    boolean        = false
+    collected_hats:  HatComponent[] = []
+    gameover:        boolean        = false
 
     constructor(s: Screen) {
         this.screen = s
@@ -91,10 +93,29 @@ class Engine {
         }
     }
 
+    /*
+       game modes state machine:
+                           +-------------------------------------+
+                          \|/                                    |
+       +-------+     +-----------+     +-----------+     +---------------+
+       | START | --> | mode_menu | --> | mode_game | --> | mode_gameover |
+       +-------+     +-----------+     +-----------+     +---------------+
+                        |    /|\
+                       \|/    |
+                   +----------------+
+                   | mode_highscore |
+                   +----------------+
+    */
+
     mode_menu() {
         this.running = false
+        this.gameover = false
         this.disable_cars = false
         this.screen.mode_menu()
+        for (var h of this.collected_hats) {
+            h.destroy()
+        }
+        this.collected_hats = []
     }
 
     // like menu, but without cars
@@ -115,12 +136,28 @@ class Engine {
         this.screen.mode_game()
     }
 
+    mode_gameover() {
+        this.gameover = true
+        this.disable_cars = true
+        this.clear_cars()
+        this.clear_hats()
+        this.screen.mode_gameover(this.collected_hats.length > 0)
+    }
+
     on_left() {
+        if (this.gameover) {
+            this.mode_menu()
+            return
+        }
         if (this.crashed || !this.running) return
         this.bike.turn_left()
     }
 
     on_right() {
+        if (this.gameover) {
+            this.mode_menu()
+            return
+        }
         if (this.crashed || !this.running) return
         this.bike.turn_right()
     }
@@ -142,7 +179,7 @@ class Engine {
         })
     }
 
-    create_hat_component(hat: Hat, parent) : Component {
+    create_hat_component(hat: Hat, parent) : HatComponent {
         return this.hats[hat.name].createObject(parent, {
             primaryColor: hat.primaryColor,
             secondaryColor: hat.secondaryColor,
@@ -209,7 +246,7 @@ class Engine {
                 highScore.bestScore = points.toString();
             }
             this.bike.destroy()
-            this.mode_menu()
+            this.mode_gameover()
         }
     }
 
@@ -335,8 +372,7 @@ class Engine {
         for (var car of this.cars) {
             if (this.collides(this.bike, car)) {
                 this.crashed = true;
-                if ((this.bike.x + this.bike.width / 2)
-                < (car.x + car.width / 2)) {
+                if ((this.bike.x + this.bike.width / 2) < (car.x + car.width / 2)) {
                     this.crash_direction = -1
                 }
             }
@@ -353,6 +389,10 @@ class Engine {
                 })
                 this.bike.attach_hat(clone)
             }
+            this.hatDrop.visible = false
+            var hatparent = this.screen.get_hat_container()
+            var hatCopy = this.create_hat_component(this.hatDrop, hatparent)
+            this.collected_hats.push(hatCopy)
             this.hatDrop.destroy()
             this.hatDrop = null
         }

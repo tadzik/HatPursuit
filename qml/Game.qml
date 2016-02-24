@@ -36,6 +36,8 @@ Page {
             loadoutButton.visible = true
             highScoresButton.visible = true
             settingsButton.visible = true
+            gameOverLabel.visible = false
+            gameOverHats.visible = false
         }
 
         function mode_game() {
@@ -52,6 +54,19 @@ Page {
             mode_game()
             score.visible = false
             highScore.visible = false
+        }
+
+        function mode_gameover(hats) {
+            mode_highscore()
+            gameOverLabel.visible = true
+            if (hats) {
+                gameOverHats.visible = true
+                gameOverHats.adjust_width()
+            }
+        }
+
+        function get_hat_container() {
+            return hat_container
         }
 
         Component.onCompleted: {
@@ -150,6 +165,49 @@ Page {
             anchors.top: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             cb: function () { screen.engine.mode_game() }
+        }
+
+        MainMenuButton {
+            id: gameOverLabel
+            label: "Game over!"
+            z: screen.layer_ui
+            anchors.bottom: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            // needed so it doesn't cover up the regular left-right buttons
+            // which in this mode change the state back into mode_menu
+            cb: function() { screen.engine.on_left() }
+        }
+
+        Item {
+            id: gameOverHats
+            anchors.top: gameOverLabel.bottom
+            anchors.horizontalCenter: parent.horizontalCenter
+            z: screen.layer_ui
+            Text {
+                id: unlockedText
+                font.pixelSize: 24
+                anchors.top: parent.top
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: "You unlocked new hats!"
+            }
+            Flow {
+                id: hat_container
+                anchors.top: unlockedText.bottom
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: unlockedText.width
+                anchors.margins: 20
+                spacing: 20
+            }
+
+            function adjust_width() {
+                // Flow cannot arrange items centered, so we limit its width in some cases,
+                // which provides a bit of a fake centering
+                var cc = hat_container.children.length
+                if (cc == 0) return
+                var hw = hat_container.children[0].width
+                hat_container.width = cc * hw + hat_container.spacing * (cc - 1)
+                hat_container.width = Math.min(hat_container.width, unlockedText.width)
+            }
         }
 
         MainMenuButton {
